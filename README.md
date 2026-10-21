@@ -6,7 +6,7 @@ A 13-part series that uses one public dataset (45 U.S. institutions, 8,034 progr
 
 ## Part 1: Syntax
 
-1. [One University, Six Syntaxes](01-same-facts-six-syntaxes.md) · Languages & Formats · JSON-LD, Microdata, RDFa, Turtle, N-Triples, JSONL
+1. [One University, Six Syntaxes](01-same-facts-six-syntaxes.md) · Languages & Formats · JSON-LD, Microdata, RDFa, Turtle, N-Triples, JSONL · **[built](experiments/01-same-facts-six-syntaxes/)**
 2. [One Question, Four Query Languages](02-one-question-four-query-languages.md) · Languages & Formats · SPARQL, Cypher, GQL, SQL
 3. [Where Does the Number Go? RDF vs. Property Graphs](03-rdf-vs-property-graph.md) · Languages & Formats · Turtle, RDF-star, Cypher
 
@@ -40,4 +40,4 @@ A 13-part series that uses one public dataset (45 U.S. institutions, 8,034 progr
 
 - **Code** is licensed under the [MIT License](LICENSE).
 - **Written content** (experiment narratives, documentation and blog drafts) is licensed under [Creative Commons Attribution 4.0 International (CC BY 4.0)](LICENSE-CONTENT). You may share and adapt it with attribution to Ray Martinez / KnowledgeGraphNavigator.com.
-- **Data** (to be added in `/data`) comes from NCES IPEDS (2024 collection year) and is a U.S. government work in the public domain.
+- **Data** in [`/data`](data/) comes from NCES IPEDS (2024 collection year) and is a U.S. government work in the public domain.

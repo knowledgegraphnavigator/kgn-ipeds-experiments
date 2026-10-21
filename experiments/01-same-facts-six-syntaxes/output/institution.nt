@@ -1,0 +1,66 @@
+<https://knowledgegraphnavigator.com/id/ipeds/152318#address> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.org/PostalAddress> .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#address> <https://schema.org/addressCountry> "US" .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#address> <https://schema.org/addressLocality> "Terre Haute" .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#address> <https://schema.org/addressRegion> "IN" .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#address> <https://schema.org/postalCode> "47803-3920" .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#address> <https://schema.org/streetAddress> "5500 Wabash Avenue" .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#admit-rate> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.org/PropertyValue> .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#admit-rate> <https://schema.org/description> "IPEDS ADM2024 (admits / applicants)" .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#admit-rate> <https://schema.org/name> "Admission rate, fall 2024" .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#admit-rate> <https://schema.org/unitText> "percent" .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#admit-rate> <https://schema.org/value> "76.9"^^<http://www.w3.org/2001/XMLSchema#decimal> .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#carnegie> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.org/PropertyValue> .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#carnegie> <https://schema.org/description> "IPEDS HD2024 (C21BASIC)" .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#carnegie> <https://schema.org/name> "Carnegie Classification 2021: Basic" .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#carnegie> <https://schema.org/value> "Special Focus Four-Year: Engineering and Other Technology-Related Schools" .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#enrollment> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.org/PropertyValue> .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#enrollment> <https://schema.org/description> "IPEDS EF2024A" .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#enrollment> <https://schema.org/name> "Total enrollment, fall 2024" .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#enrollment> <https://schema.org/value> "2334"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#geo> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.org/GeoCoordinates> .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#geo> <https://schema.org/latitude> "39.483602"^^<http://www.w3.org/2001/XMLSchema#decimal> .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#geo> <https://schema.org/longitude> "-87.326749"^^<http://www.w3.org/2001/XMLSchema#decimal> .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#graduation-rate> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.org/PropertyValue> .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#graduation-rate> <https://schema.org/description> "IPEDS GR2024, 2018 cohort" .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#graduation-rate> <https://schema.org/name> "Graduation rate within 150% of normal time" .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#graduation-rate> <https://schema.org/unitText> "percent" .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#graduation-rate> <https://schema.org/value> "78.2"^^<http://www.w3.org/2001/XMLSchema#decimal> .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#opeid> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.org/PropertyValue> .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#opeid> <https://schema.org/name> "OPE ID" .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#opeid> <https://schema.org/value> "00183000" .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#retention-rate> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.org/PropertyValue> .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#retention-rate> <https://schema.org/description> "IPEDS EF2024D" .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#retention-rate> <https://schema.org/name> "Full-time retention rate, fall 2024" .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#retention-rate> <https://schema.org/unitText> "percent" .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#retention-rate> <https://schema.org/value> "92"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#student-faculty-ratio> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.org/PropertyValue> .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#student-faculty-ratio> <https://schema.org/description> "IPEDS EF2024D" .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#student-faculty-ratio> <https://schema.org/name> "Student-to-faculty ratio (x:1)" .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#student-faculty-ratio> <https://schema.org/value> "12"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#unitid> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.org/PropertyValue> .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#unitid> <https://schema.org/name> "IPEDS UNITID" .
+<https://knowledgegraphnavigator.com/id/ipeds/152318#unitid> <https://schema.org/value> "152318" .
+<https://knowledgegraphnavigator.com/id/ipeds/152318> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://schema.org/CollegeOrUniversity> .
+<https://knowledgegraphnavigator.com/id/ipeds/152318> <https://schema.org/additionalProperty> <https://knowledgegraphnavigator.com/id/ipeds/152318#admit-rate> .
+<https://knowledgegraphnavigator.com/id/ipeds/152318> <https://schema.org/additionalProperty> <https://knowledgegraphnavigator.com/id/ipeds/152318#carnegie> .
+<https://knowledgegraphnavigator.com/id/ipeds/152318> <https://schema.org/additionalProperty> <https://knowledgegraphnavigator.com/id/ipeds/152318#enrollment> .
+<https://knowledgegraphnavigator.com/id/ipeds/152318> <https://schema.org/additionalProperty> <https://knowledgegraphnavigator.com/id/ipeds/152318#graduation-rate> .
+<https://knowledgegraphnavigator.com/id/ipeds/152318> <https://schema.org/additionalProperty> <https://knowledgegraphnavigator.com/id/ipeds/152318#retention-rate> .
+<https://knowledgegraphnavigator.com/id/ipeds/152318> <https://schema.org/additionalProperty> <https://knowledgegraphnavigator.com/id/ipeds/152318#student-faculty-ratio> .
+<https://knowledgegraphnavigator.com/id/ipeds/152318> <https://schema.org/address> <https://knowledgegraphnavigator.com/id/ipeds/152318#address> .
+<https://knowledgegraphnavigator.com/id/ipeds/152318> <https://schema.org/alternateName> "R-HIT" .
+<https://knowledgegraphnavigator.com/id/ipeds/152318> <https://schema.org/alternateName> "RHIT" .
+<https://knowledgegraphnavigator.com/id/ipeds/152318> <https://schema.org/alternateName> "RP" .
+<https://knowledgegraphnavigator.com/id/ipeds/152318> <https://schema.org/alternateName> "RPI" .
+<https://knowledgegraphnavigator.com/id/ipeds/152318> <https://schema.org/alternateName> "Rose Hulman Institute" .
+<https://knowledgegraphnavigator.com/id/ipeds/152318> <https://schema.org/alternateName> "Rose Hulman" .
+<https://knowledgegraphnavigator.com/id/ipeds/152318> <https://schema.org/alternateName> "Rose Polytechnic Institute" .
+<https://knowledgegraphnavigator.com/id/ipeds/152318> <https://schema.org/alternateName> "Rose Polytechnic" .
+<https://knowledgegraphnavigator.com/id/ipeds/152318> <https://schema.org/alternateName> "Rose" .
+<https://knowledgegraphnavigator.com/id/ipeds/152318> <https://schema.org/alternateName> "Rose-Hulman Institute" .
+<https://knowledgegraphnavigator.com/id/ipeds/152318> <https://schema.org/alternateName> "Rose-Hulman" .
+<https://knowledgegraphnavigator.com/id/ipeds/152318> <https://schema.org/geo> <https://knowledgegraphnavigator.com/id/ipeds/152318#geo> .
+<https://knowledgegraphnavigator.com/id/ipeds/152318> <https://schema.org/identifier> <https://knowledgegraphnavigator.com/id/ipeds/152318#opeid> .
+<https://knowledgegraphnavigator.com/id/ipeds/152318> <https://schema.org/identifier> <https://knowledgegraphnavigator.com/id/ipeds/152318#unitid> .
+<https://knowledgegraphnavigator.com/id/ipeds/152318> <https://schema.org/name> "Rose-Hulman Institute of Technology" .
+<https://knowledgegraphnavigator.com/id/ipeds/152318> <https://schema.org/url> <https://www.rose-hulman.edu/> .

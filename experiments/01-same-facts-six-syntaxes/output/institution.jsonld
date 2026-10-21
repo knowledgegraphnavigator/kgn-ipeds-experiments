@@ -1,0 +1,114 @@
+{
+  "@context": {
+    "@vocab": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "url": {
+      "@type": "@id"
+    }
+  },
+  "@id": "https://knowledgegraphnavigator.com/id/ipeds/152318",
+  "@type": "CollegeOrUniversity",
+  "name": "Rose-Hulman Institute of Technology",
+  "alternateName": [
+    "R-HIT",
+    "RHIT",
+    "Rose Polytechnic",
+    "Rose Polytechnic Institute",
+    "RP",
+    "RPI",
+    "Rose-Hulman",
+    "Rose Hulman",
+    "Rose-Hulman Institute",
+    "Rose Hulman Institute",
+    "Rose"
+  ],
+  "url": "https://www.rose-hulman.edu/",
+  "address": {
+    "@id": "https://knowledgegraphnavigator.com/id/ipeds/152318#address",
+    "@type": "PostalAddress",
+    "streetAddress": "5500 Wabash Avenue",
+    "addressLocality": "Terre Haute",
+    "addressRegion": "IN",
+    "postalCode": "47803-3920",
+    "addressCountry": "US"
+  },
+  "geo": {
+    "@id": "https://knowledgegraphnavigator.com/id/ipeds/152318#geo",
+    "@type": "GeoCoordinates",
+    "latitude": {
+      "@value": "39.483602",
+      "@type": "xsd:decimal"
+    },
+    "longitude": {
+      "@value": "-87.326749",
+      "@type": "xsd:decimal"
+    }
+  },
+  "identifier": [
+    {
+      "@id": "https://knowledgegraphnavigator.com/id/ipeds/152318#unitid",
+      "@type": "PropertyValue",
+      "name": "IPEDS UNITID",
+      "value": "152318"
+    },
+    {
+      "@id": "https://knowledgegraphnavigator.com/id/ipeds/152318#opeid",
+      "@type": "PropertyValue",
+      "name": "OPE ID",
+      "value": "00183000"
+    }
+  ],
+  "additionalProperty": [
+    {
+      "@id": "https://knowledgegraphnavigator.com/id/ipeds/152318#carnegie",
+      "@type": "PropertyValue",
+      "name": "Carnegie Classification 2021: Basic",
+      "value": "Special Focus Four-Year: Engineering and Other Technology-Related Schools",
+      "description": "IPEDS HD2024 (C21BASIC)"
+    },
+    {
+      "@id": "https://knowledgegraphnavigator.com/id/ipeds/152318#enrollment",
+      "@type": "PropertyValue",
+      "name": "Total enrollment, fall 2024",
+      "value": 2334,
+      "description": "IPEDS EF2024A"
+    },
+    {
+      "@id": "https://knowledgegraphnavigator.com/id/ipeds/152318#admit-rate",
+      "@type": "PropertyValue",
+      "name": "Admission rate, fall 2024",
+      "value": {
+        "@value": "76.9",
+        "@type": "xsd:decimal"
+      },
+      "unitText": "percent",
+      "description": "IPEDS ADM2024 (admits / applicants)"
+    },
+    {
+      "@id": "https://knowledgegraphnavigator.com/id/ipeds/152318#graduation-rate",
+      "@type": "PropertyValue",
+      "name": "Graduation rate within 150% of normal time",
+      "value": {
+        "@value": "78.2",
+        "@type": "xsd:decimal"
+      },
+      "unitText": "percent",
+      "description": "IPEDS GR2024, 2018 cohort"
+    },
+    {
+      "@id": "https://knowledgegraphnavigator.com/id/ipeds/152318#retention-rate",
+      "@type": "PropertyValue",
+      "name": "Full-time retention rate, fall 2024",
+      "value": 92,
+      "unitText": "percent",
+      "description": "IPEDS EF2024D"
+    },
+    {
+      "@id": "https://knowledgegraphnavigator.com/id/ipeds/152318#student-faculty-ratio",
+      "@type": "PropertyValue",
+      "name": "Student-to-faculty ratio (x:1)",
+      "value": 12,
+      "description": "IPEDS EF2024D"
+    }
+  ]
+}

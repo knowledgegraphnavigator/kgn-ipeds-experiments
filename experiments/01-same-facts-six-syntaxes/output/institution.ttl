@@ -1,0 +1,81 @@
+@prefix inst: <https://knowledgegraphnavigator.com/id/ipeds/152318#> .
+@prefix schema: <https://schema.org/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://knowledgegraphnavigator.com/id/ipeds/152318> a schema:CollegeOrUniversity ;
+    schema:additionalProperty inst:admit-rate,
+        inst:carnegie,
+        inst:enrollment,
+        inst:graduation-rate,
+        inst:retention-rate,
+        inst:student-faculty-ratio ;
+    schema:address inst:address ;
+    schema:alternateName "R-HIT",
+        "RHIT",
+        "RP",
+        "RPI",
+        "Rose",
+        "Rose Hulman",
+        "Rose Hulman Institute",
+        "Rose Polytechnic",
+        "Rose Polytechnic Institute",
+        "Rose-Hulman",
+        "Rose-Hulman Institute" ;
+    schema:geo inst:geo ;
+    schema:identifier inst:opeid,
+        inst:unitid ;
+    schema:name "Rose-Hulman Institute of Technology" ;
+    schema:url <https://www.rose-hulman.edu/> .
+
+inst:address a schema:PostalAddress ;
+    schema:addressCountry "US" ;
+    schema:addressLocality "Terre Haute" ;
+    schema:addressRegion "IN" ;
+    schema:postalCode "47803-3920" ;
+    schema:streetAddress "5500 Wabash Avenue" .
+
+inst:admit-rate a schema:PropertyValue ;
+    schema:description "IPEDS ADM2024 (admits / applicants)" ;
+    schema:name "Admission rate, fall 2024" ;
+    schema:unitText "percent" ;
+    schema:value 76.9 .
+
+inst:carnegie a schema:PropertyValue ;
+    schema:description "IPEDS HD2024 (C21BASIC)" ;
+    schema:name "Carnegie Classification 2021: Basic" ;
+    schema:value "Special Focus Four-Year: Engineering and Other Technology-Related Schools" .
+
+inst:enrollment a schema:PropertyValue ;
+    schema:description "IPEDS EF2024A" ;
+    schema:name "Total enrollment, fall 2024" ;
+    schema:value 2334 .
+
+inst:geo a schema:GeoCoordinates ;
+    schema:latitude 39.483602 ;
+    schema:longitude -87.326749 .
+
+inst:graduation-rate a schema:PropertyValue ;
+    schema:description "IPEDS GR2024, 2018 cohort" ;
+    schema:name "Graduation rate within 150% of normal time" ;
+    schema:unitText "percent" ;
+    schema:value 78.2 .
+
+inst:opeid a schema:PropertyValue ;
+    schema:name "OPE ID" ;
+    schema:value "00183000" .
+
+inst:retention-rate a schema:PropertyValue ;
+    schema:description "IPEDS EF2024D" ;
+    schema:name "Full-time retention rate, fall 2024" ;
+    schema:unitText "percent" ;
+    schema:value 92 .
+
+inst:student-faculty-ratio a schema:PropertyValue ;
+    schema:description "IPEDS EF2024D" ;
+    schema:name "Student-to-faculty ratio (x:1)" ;
+    schema:value 12 .
+
+inst:unitid a schema:PropertyValue ;
+    schema:name "IPEDS UNITID" ;
+    schema:value "152318" .
+
