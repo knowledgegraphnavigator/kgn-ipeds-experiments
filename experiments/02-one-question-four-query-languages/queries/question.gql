@@ -1,0 +1,15 @@
+// Which schools offer a fully online master's in the health professions
+// and graduate more than 60% of their students within six years?
+//
+// ISO/IEC 39075:2024 GQL, against the same property graph schema as the
+// Cypher query. Executed with GraphLite (see run_gql.py and the README).
+MATCH (i:Institution)-[:OFFERS]->(o:Offering)-[:IN_FAMILY]->(f:CipFamily {code: '51'})
+WHERE o.awardLevelCode = 7
+  AND o.fullyDistance > 0
+  AND i.gradRate150All > 60
+RETURN i.unitid         AS unitid,
+       i.name           AS institution,
+       i.gradRate150All AS gradRate6yr,
+       count(o)         AS onlineHealthMasters
+GROUP BY i.unitid, i.name, i.gradRate150All
+ORDER BY gradRate6yr DESC;

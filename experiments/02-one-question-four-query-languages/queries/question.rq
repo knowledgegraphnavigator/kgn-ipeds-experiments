@@ -1,0 +1,22 @@
+# Which schools offer a fully online master's in the health professions
+# and graduate more than 60% of their students within six years?
+#
+# SPARQL (rdflib), against an RDF graph built from the same CSVs.
+PREFIX schema: <https://schema.org/>
+PREFIX kgn:    <https://knowledgegraphnavigator.com/vocab/ipeds#>
+
+SELECT ?unitid ?institution ?gradRate6yr (COUNT(?program) AS ?onlineHealthMasters)
+WHERE {
+  ?program a schema:EducationalOccupationalProgram ;
+           schema:provider          ?school ;
+           kgn:cipFamily            ?family ;
+           kgn:awardLevelCode       7 ;          # Master's degree
+           kgn:fullyDistancePrograms ?online .
+  ?family  kgn:cipCode              "51" .       # Health Professions
+  ?school  schema:name              ?institution ;
+           kgn:unitid               ?unitid ;
+           kgn:gradRate150All       ?gradRate6yr .
+  FILTER (?online > 0 && ?gradRate6yr > 60)
+}
+GROUP BY ?unitid ?institution ?gradRate6yr
+ORDER BY DESC(?gradRate6yr)
