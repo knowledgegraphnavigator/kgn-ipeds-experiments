@@ -8,9 +8,9 @@ This experiment asks that question four ways against the same IPEDS 2024 data, i
 
 **The bigger finding:** the language never changed the answer, but the definitions did. Small, defensible changes to what "fully online" and "six-year graduation rate" mean moved the answer from 6 schools to 5 or to 10, and all four languages moved together every time.
 
-![Query tabs beside the graph of candidate schools](viz/screenshot.jpg)
+[![Query tabs beside the graph of candidate schools](viz/screenshot.jpg)](https://knowledgegraphnavigator.github.io/kgn-ipeds-experiments/experiments/02-one-question-four-query-languages/viz/)
 
-Open [`viz/index.html`](viz/index.html) to explore it. Switch the definition, or try one of the small slips, to see which query lines change and which schools join or leave the answer.
+**[Open the interactive visualization](https://knowledgegraphnavigator.github.io/kgn-ipeds-experiments/experiments/02-one-question-four-query-languages/viz/)** to explore it. (GitHub shows `viz/index.html` as source code; the link above runs it.) Switch the definition, or try one of the small slips, to see which query lines change and which schools join or leave the answer.
 
 ## Results
 
