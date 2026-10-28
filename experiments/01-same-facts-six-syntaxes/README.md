@@ -6,9 +6,9 @@ Rose-Hulman Institute of Technology, written six times with the same facts each 
 
 **Answer:** The facts are the same in all six. The graph is identical in four. Microdata and RDFa produce the same facts with slightly different literals, because HTML has its own rules about language and numbers.
 
-![Six code panels beside one shared graph](viz/screenshot.png)
+[![Six code panels beside one shared graph](viz/screenshot.png)](https://knowledgegraphnavigator.github.io/kgn-ipeds-experiments/experiments/01-same-facts-six-syntaxes/viz/)
 
-Open [`viz/index.html`](viz/index.html) in a browser to explore it. Click any node to highlight where each syntax states it.
+**[Open the interactive visualization](https://knowledgegraphnavigator.github.io/kgn-ipeds-experiments/experiments/01-same-facts-six-syntaxes/viz/)** to explore it. (GitHub shows `viz/index.html` as source code; the link above runs it.) Click any node to highlight where each syntax states it.
 
 ## Results
 
