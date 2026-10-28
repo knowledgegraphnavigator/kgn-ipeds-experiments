@@ -1,0 +1,1597 @@
+{
+  "variants": {
+    "baseline": {
+      "label": "Fully online programs; all-student six-year rate",
+      "answers": {
+        "SQL": [
+          [
+            "123961",
+            "University of Southern California",
+            91.8,
+            3
+          ],
+          [
+            "193900",
+            "New York University",
+            87.6,
+            1
+          ],
+          [
+            "236948",
+            "University of Washington-Seattle Campus",
+            85.2,
+            3
+          ],
+          [
+            "223232",
+            "Baylor University",
+            80.0,
+            1
+          ],
+          [
+            "132903",
+            "University of Central Florida",
+            78.0,
+            3
+          ],
+          [
+            "135081",
+            "Keiser University-Ft Lauderdale",
+            61.0,
+            3
+          ]
+        ],
+        "SPARQL": [
+          [
+            "123961",
+            "University of Southern California",
+            91.8,
+            3
+          ],
+          [
+            "193900",
+            "New York University",
+            87.6,
+            1
+          ],
+          [
+            "236948",
+            "University of Washington-Seattle Campus",
+            85.2,
+            3
+          ],
+          [
+            "223232",
+            "Baylor University",
+            80.0,
+            1
+          ],
+          [
+            "132903",
+            "University of Central Florida",
+            78.0,
+            3
+          ],
+          [
+            "135081",
+            "Keiser University-Ft Lauderdale",
+            61.0,
+            3
+          ]
+        ],
+        "Cypher": [
+          [
+            "123961",
+            "University of Southern California",
+            91.8,
+            3
+          ],
+          [
+            "193900",
+            "New York University",
+            87.6,
+            1
+          ],
+          [
+            "236948",
+            "University of Washington-Seattle Campus",
+            85.2,
+            3
+          ],
+          [
+            "223232",
+            "Baylor University",
+            80.0,
+            1
+          ],
+          [
+            "132903",
+            "University of Central Florida",
+            78.0,
+            3
+          ],
+          [
+            "135081",
+            "Keiser University-Ft Lauderdale",
+            61.0,
+            3
+          ]
+        ]
+      }
+    },
+    "bachelors": {
+      "label": "Fully online programs; bachelor's-seeking six-year rate",
+      "answers": {
+        "SQL": [
+          [
+            "123961",
+            "University of Southern California",
+            91.8,
+            3
+          ],
+          [
+            "193900",
+            "New York University",
+            87.8,
+            1
+          ],
+          [
+            "236948",
+            "University of Washington-Seattle Campus",
+            85.2,
+            3
+          ],
+          [
+            "223232",
+            "Baylor University",
+            80.0,
+            1
+          ],
+          [
+            "132903",
+            "University of Central Florida",
+            78.0,
+            3
+          ]
+        ],
+        "SPARQL": [
+          [
+            "123961",
+            "University of Southern California",
+            91.8,
+            3
+          ],
+          [
+            "193900",
+            "New York University",
+            87.8,
+            1
+          ],
+          [
+            "236948",
+            "University of Washington-Seattle Campus",
+            85.2,
+            3
+          ],
+          [
+            "223232",
+            "Baylor University",
+            80.0,
+            1
+          ],
+          [
+            "132903",
+            "University of Central Florida",
+            78.0,
+            3
+          ]
+        ],
+        "Cypher": [
+          [
+            "123961",
+            "University of Southern California",
+            91.8,
+            3
+          ],
+          [
+            "193900",
+            "New York University",
+            87.8,
+            1
+          ],
+          [
+            "236948",
+            "University of Washington-Seattle Campus",
+            85.2,
+            3
+          ],
+          [
+            "223232",
+            "Baylor University",
+            80.0,
+            1
+          ],
+          [
+            "132903",
+            "University of Central Florida",
+            78.0,
+            3
+          ]
+        ]
+      }
+    },
+    "any-online": {
+      "label": "Fully or partly online programs; all-student six-year rate",
+      "answers": {
+        "SQL": [
+          [
+            "123961",
+            "University of Southern California",
+            91.8,
+            6
+          ],
+          [
+            "204796",
+            "Ohio State University-Main Campus",
+            87.7,
+            6
+          ],
+          [
+            "193900",
+            "New York University",
+            87.6,
+            3
+          ],
+          [
+            "236948",
+            "University of Washington-Seattle Campus",
+            85.2,
+            3
+          ],
+          [
+            "223232",
+            "Baylor University",
+            80.0,
+            2
+          ],
+          [
+            "132903",
+            "University of Central Florida",
+            78.0,
+            3
+          ],
+          [
+            "122755",
+            "San Jose State University",
+            69.2,
+            2
+          ],
+          [
+            "144740",
+            "DePaul University",
+            67.8,
+            2
+          ],
+          [
+            "195809",
+            "St. John's University-New York",
+            66.1,
+            3
+          ],
+          [
+            "135081",
+            "Keiser University-Ft Lauderdale",
+            61.0,
+            4
+          ]
+        ],
+        "SPARQL": [
+          [
+            "123961",
+            "University of Southern California",
+            91.8,
+            6
+          ],
+          [
+            "204796",
+            "Ohio State University-Main Campus",
+            87.7,
+            6
+          ],
+          [
+            "193900",
+            "New York University",
+            87.6,
+            3
+          ],
+          [
+            "236948",
+            "University of Washington-Seattle Campus",
+            85.2,
+            3
+          ],
+          [
+            "223232",
+            "Baylor University",
+            80.0,
+            2
+          ],
+          [
+            "132903",
+            "University of Central Florida",
+            78.0,
+            3
+          ],
+          [
+            "122755",
+            "San Jose State University",
+            69.2,
+            2
+          ],
+          [
+            "144740",
+            "DePaul University",
+            67.8,
+            2
+          ],
+          [
+            "195809",
+            "St. John's University-New York",
+            66.1,
+            3
+          ],
+          [
+            "135081",
+            "Keiser University-Ft Lauderdale",
+            61.0,
+            4
+          ]
+        ],
+        "Cypher": [
+          [
+            "123961",
+            "University of Southern California",
+            91.8,
+            6
+          ],
+          [
+            "204796",
+            "Ohio State University-Main Campus",
+            87.7,
+            6
+          ],
+          [
+            "193900",
+            "New York University",
+            87.6,
+            3
+          ],
+          [
+            "236948",
+            "University of Washington-Seattle Campus",
+            85.2,
+            3
+          ],
+          [
+            "223232",
+            "Baylor University",
+            80.0,
+            2
+          ],
+          [
+            "132903",
+            "University of Central Florida",
+            78.0,
+            3
+          ],
+          [
+            "122755",
+            "San Jose State University",
+            69.2,
+            2
+          ],
+          [
+            "144740",
+            "DePaul University",
+            67.8,
+            2
+          ],
+          [
+            "195809",
+            "St. John's University-New York",
+            66.1,
+            3
+          ],
+          [
+            "135081",
+            "Keiser University-Ft Lauderdale",
+            61.0,
+            4
+          ]
+        ]
+      }
+    }
+  },
+  "queries": {
+    "SQL": "-- Which schools offer a fully online master's in the health professions\n-- and graduate more than 60% of their students within six years?\n--\n-- SQL (DuckDB), run directly against the IPEDS CSVs.\nSELECT\n    i.UNITID                        AS unitid,\n    i.name                          AS institution,\n    o.gr4_rate_150_all_pct          AS grad_rate_6yr,\n    count(*)                        AS online_health_masters\nFROM programs      AS p\nJOIN institutions  AS i ON i.UNITID = p.UNITID\nJOIN outcomes      AS o ON o.UNITID = p.UNITID\nWHERE p.cip_2digit = '51'                       -- Health Professions\n  AND p.awlevel_code = 7                        -- Master's degree\n  AND p.programs_offered_fully_distance > 0     -- offered fully online\n  AND o.gr4_rate_150_all_pct > 60               -- 150% of normal time = 6 years\nGROUP BY i.UNITID, i.name, o.gr4_rate_150_all_pct\nORDER BY grad_rate_6yr DESC;\n",
+    "SPARQL": "# Which schools offer a fully online master's in the health professions\n# and graduate more than 60% of their students within six years?\n#\n# SPARQL (rdflib), against an RDF graph built from the same CSVs.\nPREFIX schema: <https://schema.org/>\nPREFIX kgn:    <https://knowledgegraphnavigator.com/vocab/ipeds#>\n\nSELECT ?unitid ?institution ?gradRate6yr (COUNT(?program) AS ?onlineHealthMasters)\nWHERE {\n  ?program a schema:EducationalOccupationalProgram ;\n           schema:provider          ?school ;\n           kgn:cipFamily            ?family ;\n           kgn:awardLevelCode       7 ;          # Master's degree\n           kgn:fullyDistancePrograms ?online .\n  ?family  kgn:cipCode              \"51\" .       # Health Professions\n  ?school  schema:name              ?institution ;\n           kgn:unitid               ?unitid ;\n           kgn:gradRate150All       ?gradRate6yr .\n  FILTER (?online > 0 && ?gradRate6yr > 60)\n}\nGROUP BY ?unitid ?institution ?gradRate6yr\nORDER BY DESC(?gradRate6yr)\n",
+    "Cypher": "// Which schools offer a fully online master's in the health professions\n// and graduate more than 60% of their students within six years?\n//\n// Cypher (Kuzu), against a labeled property graph built from the same CSVs.\nMATCH (i:Institution)-[:OFFERS]->(o:Offering)-[:IN_FAMILY]->(f:CipFamily {code: '51'})\nWHERE o.awardLevelCode = 7\n  AND o.fullyDistance > 0\n  AND i.gradRate150All > 60\nRETURN i.unitid         AS unitid,\n       i.name           AS institution,\n       i.gradRate150All AS gradRate6yr,\n       count(o)         AS onlineHealthMasters\nORDER BY gradRate6yr DESC;\n",
+    "GQL": "// Which schools offer a fully online master's in the health professions\n// and graduate more than 60% of their students within six years?\n//\n// ISO/IEC 39075:2024 GQL, against the same property graph schema as the\n// Cypher query. Executed with GraphLite (see run_gql.py and the README).\nMATCH (i:Institution)-[:OFFERS]->(o:Offering)-[:IN_FAMILY]->(f:CipFamily {code: '51'})\nWHERE o.awardLevelCode = 7\n  AND o.fullyDistance > 0\n  AND i.gradRate150All > 60\nRETURN i.unitid         AS unitid,\n       i.name           AS institution,\n       i.gradRate150All AS gradRate6yr,\n       count(o)         AS onlineHealthMasters\nGROUP BY i.unitid, i.name, i.gradRate150All\nORDER BY gradRate6yr DESC;\n"
+  },
+  "candidates": [
+    {
+      "unitid": "110608",
+      "name": "California State University-Northridge",
+      "sector": "Public, 4-year or above",
+      "rateAll": 56.9,
+      "rateBach": 56.9,
+      "fully": 1,
+      "some": 0,
+      "cips": [
+        {
+          "cip": "51.0201",
+          "mode": "fully"
+        }
+      ]
+    },
+    {
+      "unitid": "122755",
+      "name": "San Jose State University",
+      "sector": "Public, 4-year or above",
+      "rateAll": 69.2,
+      "rateBach": 69.2,
+      "fully": 0,
+      "some": 2,
+      "cips": [
+        {
+          "cip": "51.0203",
+          "mode": "some"
+        },
+        {
+          "cip": "51.2201",
+          "mode": "some"
+        }
+      ]
+    },
+    {
+      "unitid": "123961",
+      "name": "University of Southern California",
+      "sector": "Private not-for-profit, 4-year or above",
+      "rateAll": 91.8,
+      "rateBach": 91.8,
+      "fully": 3,
+      "some": 3,
+      "cips": [
+        {
+          "cip": "51.0503",
+          "mode": "fully"
+        },
+        {
+          "cip": "51.0504",
+          "mode": "fully"
+        },
+        {
+          "cip": "51.0599",
+          "mode": "some"
+        },
+        {
+          "cip": "51.0701",
+          "mode": "some"
+        },
+        {
+          "cip": "51.2201",
+          "mode": "some"
+        },
+        {
+          "cip": "51.9999",
+          "mode": "fully"
+        }
+      ]
+    },
+    {
+      "unitid": "132903",
+      "name": "University of Central Florida",
+      "sector": "Public, 4-year or above",
+      "rateAll": 78.0,
+      "rateBach": 78.0,
+      "fully": 3,
+      "some": 0,
+      "cips": [
+        {
+          "cip": "51.0000",
+          "mode": "fully"
+        },
+        {
+          "cip": "51.0706",
+          "mode": "fully"
+        },
+        {
+          "cip": "51.3801",
+          "mode": "fully"
+        }
+      ]
+    },
+    {
+      "unitid": "135081",
+      "name": "Keiser University-Ft Lauderdale",
+      "sector": "Private not-for-profit, 4-year or above",
+      "rateAll": 61.0,
+      "rateBach": 57.7,
+      "fully": 3,
+      "some": 1,
+      "cips": [
+        {
+          "cip": "51.1508",
+          "mode": "fully"
+        },
+        {
+          "cip": "51.3802",
+          "mode": "fully"
+        },
+        {
+          "cip": "51.3804",
+          "mode": "some"
+        },
+        {
+          "cip": "51.3805",
+          "mode": "fully"
+        }
+      ]
+    },
+    {
+      "unitid": "144740",
+      "name": "DePaul University",
+      "sector": "Private not-for-profit, 4-year or above",
+      "rateAll": 67.8,
+      "rateBach": 67.8,
+      "fully": 0,
+      "some": 2,
+      "cips": [
+        {
+          "cip": "51.2706",
+          "mode": "some"
+        },
+        {
+          "cip": "51.3801",
+          "mode": "some"
+        }
+      ]
+    },
+    {
+      "unitid": "183026",
+      "name": "Southern New Hampshire University",
+      "sector": "Private not-for-profit, 4-year or above",
+      "rateAll": 42.8,
+      "rateBach": 45.4,
+      "fully": 5,
+      "some": 0,
+      "cips": [
+        {
+          "cip": "51.0701",
+          "mode": "fully"
+        },
+        {
+          "cip": "51.0799",
+          "mode": "fully"
+        },
+        {
+          "cip": "51.1508",
+          "mode": "fully"
+        },
+        {
+          "cip": "51.2201",
+          "mode": "fully"
+        },
+        {
+          "cip": "51.3801",
+          "mode": "fully"
+        }
+      ]
+    },
+    {
+      "unitid": "193900",
+      "name": "New York University",
+      "sector": "Private not-for-profit, 4-year or above",
+      "rateAll": 87.6,
+      "rateBach": 87.8,
+      "fully": 1,
+      "some": 2,
+      "cips": [
+        {
+          "cip": "51.0204",
+          "mode": "some"
+        },
+        {
+          "cip": "51.0701",
+          "mode": "fully"
+        },
+        {
+          "cip": "51.0702",
+          "mode": "some"
+        }
+      ]
+    },
+    {
+      "unitid": "195809",
+      "name": "St. John's University-New York",
+      "sector": "Private not-for-profit, 4-year or above",
+      "rateAll": 66.1,
+      "rateBach": 66.1,
+      "fully": 0,
+      "some": 3,
+      "cips": [
+        {
+          "cip": "51.0701",
+          "mode": "some"
+        },
+        {
+          "cip": "51.0707",
+          "mode": "some"
+        },
+        {
+          "cip": "51.2201",
+          "mode": "some"
+        }
+      ]
+    },
+    {
+      "unitid": "199102",
+      "name": "North Carolina A & T State University",
+      "sector": "Public, 4-year or above",
+      "rateAll": 57.2,
+      "rateBach": 57.2,
+      "fully": 1,
+      "some": 0,
+      "cips": [
+        {
+          "cip": "51.0912",
+          "mode": "fully"
+        }
+      ]
+    },
+    {
+      "unitid": "204796",
+      "name": "Ohio State University-Main Campus",
+      "sector": "Public, 4-year or above",
+      "rateAll": 87.7,
+      "rateBach": 87.7,
+      "fully": 0,
+      "some": 6,
+      "cips": [
+        {
+          "cip": "51.0602",
+          "mode": "some"
+        },
+        {
+          "cip": "51.0701",
+          "mode": "some"
+        },
+        {
+          "cip": "51.1005",
+          "mode": "some"
+        },
+        {
+          "cip": "51.2201",
+          "mode": "some"
+        },
+        {
+          "cip": "51.3201",
+          "mode": "some"
+        },
+        {
+          "cip": "51.3801",
+          "mode": "some"
+        }
+      ]
+    },
+    {
+      "unitid": "223232",
+      "name": "Baylor University",
+      "sector": "Private not-for-profit, 4-year or above",
+      "rateAll": 80.0,
+      "rateBach": 80.0,
+      "fully": 1,
+      "some": 1,
+      "cips": [
+        {
+          "cip": "51.0201",
+          "mode": "some"
+        },
+        {
+          "cip": "51.1199",
+          "mode": "fully"
+        }
+      ]
+    },
+    {
+      "unitid": "230737",
+      "name": "Utah Valley University",
+      "sector": "Public, 4-year or above",
+      "rateAll": 45.1,
+      "rateBach": 46.8,
+      "fully": 0,
+      "some": 1,
+      "cips": [
+        {
+          "cip": "51.3801",
+          "mode": "some"
+        }
+      ]
+    },
+    {
+      "unitid": "236948",
+      "name": "University of Washington-Seattle Campus",
+      "sector": "Public, 4-year or above",
+      "rateAll": 85.2,
+      "rateBach": 85.2,
+      "fully": 3,
+      "some": 0,
+      "cips": [
+        {
+          "cip": "51.1503",
+          "mode": "fully"
+        },
+        {
+          "cip": "51.2003",
+          "mode": "fully"
+        },
+        {
+          "cip": "51.9999",
+          "mode": "fully"
+        }
+      ]
+    },
+    {
+      "unitid": "242972",
+      "name": "NUC University",
+      "sector": "Private for-profit, 4-year or above",
+      "rateAll": 54.4,
+      "rateBach": 26.6,
+      "fully": 0,
+      "some": 3,
+      "cips": [
+        {
+          "cip": "51.3203",
+          "mode": "some"
+        },
+        {
+          "cip": "51.3801",
+          "mode": "some"
+        },
+        {
+          "cip": "51.3803",
+          "mode": "some"
+        }
+      ]
+    },
+    {
+      "unitid": "433387",
+      "name": "Western Governors University",
+      "sector": "Private not-for-profit, 4-year or above",
+      "rateAll": 46.2,
+      "rateBach": 46.2,
+      "fully": 5,
+      "some": 0,
+      "cips": [
+        {
+          "cip": "51.0701",
+          "mode": "fully"
+        },
+        {
+          "cip": "51.3203",
+          "mode": "fully"
+        },
+        {
+          "cip": "51.3802",
+          "mode": "fully"
+        },
+        {
+          "cip": "51.3805",
+          "mode": "fully"
+        },
+        {
+          "cip": "51.3899",
+          "mode": "fully"
+        }
+      ]
+    },
+    {
+      "unitid": "449339",
+      "name": "American Public University System",
+      "sector": "Private for-profit, 4-year or above",
+      "rateAll": 57.2,
+      "rateBach": 50.3,
+      "fully": 4,
+      "some": 0,
+      "cips": [
+        {
+          "cip": "51.0701",
+          "mode": "fully"
+        },
+        {
+          "cip": "51.0706",
+          "mode": "fully"
+        },
+        {
+          "cip": "51.2201",
+          "mode": "fully"
+        },
+        {
+          "cip": "51.3801",
+          "mode": "fully"
+        }
+      ]
+    },
+    {
+      "unitid": "454227",
+      "name": "Chamberlain University-Illinois",
+      "sector": "Private for-profit, 4-year or above",
+      "rateAll": 41.7,
+      "rateBach": 41.7,
+      "fully": 5,
+      "some": 0,
+      "cips": [
+        {
+          "cip": "51.2201",
+          "mode": "fully"
+        },
+        {
+          "cip": "51.3801",
+          "mode": "fully"
+        },
+        {
+          "cip": "51.3803",
+          "mode": "fully"
+        },
+        {
+          "cip": "51.3805",
+          "mode": "fully"
+        },
+        {
+          "cip": "51.3810",
+          "mode": "fully"
+        }
+      ]
+    },
+    {
+      "unitid": "459736",
+      "name": "Touro University California",
+      "sector": "Private not-for-profit, 4-year or above",
+      "rateAll": null,
+      "rateBach": null,
+      "fully": 1,
+      "some": 2,
+      "cips": [
+        {
+          "cip": "51.0000",
+          "mode": "some"
+        },
+        {
+          "cip": "51.2201",
+          "mode": "fully"
+        },
+        {
+          "cip": "51.3808",
+          "mode": "some"
+        }
+      ]
+    },
+    {
+      "unitid": "484613",
+      "name": "University of Phoenix-Arizona",
+      "sector": "Private for-profit, 4-year or above",
+      "rateAll": 20.8,
+      "rateBach": 16.4,
+      "fully": 7,
+      "some": 0,
+      "cips": [
+        {
+          "cip": "51.0701",
+          "mode": "fully"
+        },
+        {
+          "cip": "51.1505",
+          "mode": "fully"
+        },
+        {
+          "cip": "51.1508",
+          "mode": "fully"
+        },
+        {
+          "cip": "51.2201",
+          "mode": "fully"
+        },
+        {
+          "cip": "51.3203",
+          "mode": "fully"
+        },
+        {
+          "cip": "51.3802",
+          "mode": "fully"
+        },
+        {
+          "cip": "51.3805",
+          "mode": "fully"
+        }
+      ]
+    }
+  ],
+  "traps": {
+    "quoted-code": {
+      "label": "Write the CIP code as a number: 51 instead of '51'",
+      "why": "The code is stored as text. DuckDB and Kuzu quietly convert 51 to '51' and still return the right schools. SPARQL compares RDF terms, so the integer 51 never matches the string \"51\": it returns nothing, with no error.",
+      "results": {
+        "SQL": {
+          "rows": [
+            [
+              "123961",
+              "University of Southern California",
+              91.8,
+              3
+            ],
+            [
+              "193900",
+              "New York University",
+              87.6,
+              1
+            ],
+            [
+              "236948",
+              "University of Washington-Seattle Campus",
+              85.2,
+              3
+            ],
+            [
+              "223232",
+              "Baylor University",
+              80.0,
+              1
+            ],
+            [
+              "132903",
+              "University of Central Florida",
+              78.0,
+              3
+            ],
+            [
+              "135081",
+              "Keiser University-Ft Lauderdale",
+              61.0,
+              3
+            ]
+          ]
+        },
+        "SPARQL": {
+          "rows": []
+        },
+        "Cypher": {
+          "rows": [
+            [
+              "123961",
+              "University of Southern California",
+              91.8,
+              3
+            ],
+            [
+              "193900",
+              "New York University",
+              87.6,
+              1
+            ],
+            [
+              "236948",
+              "University of Washington-Seattle Campus",
+              85.2,
+              3
+            ],
+            [
+              "223232",
+              "Baylor University",
+              80.0,
+              1
+            ],
+            [
+              "132903",
+              "University of Central Florida",
+              78.0,
+              3
+            ],
+            [
+              "135081",
+              "Keiser University-Ft Lauderdale",
+              61.0,
+              3
+            ]
+          ]
+        }
+      }
+    },
+    "proportion": {
+      "label": "Write the threshold as a proportion: > 0.6 instead of > 60",
+      "why": "IPEDS rates are stored as percents (0-100). Every school with a rate clears 0.6.",
+      "results": {
+        "SQL": {
+          "rows": [
+            [
+              "123961",
+              "University of Southern California",
+              91.8,
+              3
+            ],
+            [
+              "193900",
+              "New York University",
+              87.6,
+              1
+            ],
+            [
+              "236948",
+              "University of Washington-Seattle Campus",
+              85.2,
+              3
+            ],
+            [
+              "223232",
+              "Baylor University",
+              80.0,
+              1
+            ],
+            [
+              "132903",
+              "University of Central Florida",
+              78.0,
+              3
+            ],
+            [
+              "135081",
+              "Keiser University-Ft Lauderdale",
+              61.0,
+              3
+            ],
+            [
+              "199102",
+              "North Carolina A & T State University",
+              57.2,
+              1
+            ],
+            [
+              "449339",
+              "American Public University System",
+              57.2,
+              4
+            ],
+            [
+              "110608",
+              "California State University-Northridge",
+              56.9,
+              1
+            ],
+            [
+              "433387",
+              "Western Governors University",
+              46.2,
+              5
+            ],
+            [
+              "183026",
+              "Southern New Hampshire University",
+              42.8,
+              5
+            ],
+            [
+              "454227",
+              "Chamberlain University-Illinois",
+              41.7,
+              5
+            ],
+            [
+              "484613",
+              "University of Phoenix-Arizona",
+              20.8,
+              7
+            ]
+          ]
+        },
+        "SPARQL": {
+          "rows": [
+            [
+              "123961",
+              "University of Southern California",
+              91.8,
+              3
+            ],
+            [
+              "193900",
+              "New York University",
+              87.6,
+              1
+            ],
+            [
+              "236948",
+              "University of Washington-Seattle Campus",
+              85.2,
+              3
+            ],
+            [
+              "223232",
+              "Baylor University",
+              80.0,
+              1
+            ],
+            [
+              "132903",
+              "University of Central Florida",
+              78.0,
+              3
+            ],
+            [
+              "135081",
+              "Keiser University-Ft Lauderdale",
+              61.0,
+              3
+            ],
+            [
+              "199102",
+              "North Carolina A & T State University",
+              57.2,
+              1
+            ],
+            [
+              "449339",
+              "American Public University System",
+              57.2,
+              4
+            ],
+            [
+              "110608",
+              "California State University-Northridge",
+              56.9,
+              1
+            ],
+            [
+              "433387",
+              "Western Governors University",
+              46.2,
+              5
+            ],
+            [
+              "183026",
+              "Southern New Hampshire University",
+              42.8,
+              5
+            ],
+            [
+              "454227",
+              "Chamberlain University-Illinois",
+              41.7,
+              5
+            ],
+            [
+              "484613",
+              "University of Phoenix-Arizona",
+              20.8,
+              7
+            ]
+          ]
+        },
+        "Cypher": {
+          "rows": [
+            [
+              "123961",
+              "University of Southern California",
+              91.8,
+              3
+            ],
+            [
+              "193900",
+              "New York University",
+              87.6,
+              1
+            ],
+            [
+              "236948",
+              "University of Washington-Seattle Campus",
+              85.2,
+              3
+            ],
+            [
+              "223232",
+              "Baylor University",
+              80.0,
+              1
+            ],
+            [
+              "132903",
+              "University of Central Florida",
+              78.0,
+              3
+            ],
+            [
+              "135081",
+              "Keiser University-Ft Lauderdale",
+              61.0,
+              3
+            ],
+            [
+              "199102",
+              "North Carolina A & T State University",
+              57.2,
+              1
+            ],
+            [
+              "449339",
+              "American Public University System",
+              57.2,
+              4
+            ],
+            [
+              "110608",
+              "California State University-Northridge",
+              56.9,
+              1
+            ],
+            [
+              "433387",
+              "Western Governors University",
+              46.2,
+              5
+            ],
+            [
+              "183026",
+              "Southern New Hampshire University",
+              42.8,
+              5
+            ],
+            [
+              "454227",
+              "Chamberlain University-Illinois",
+              41.7,
+              5
+            ],
+            [
+              "484613",
+              "University of Phoenix-Arizona",
+              20.8,
+              7
+            ]
+          ]
+        }
+      }
+    },
+    "optional-filter": {
+      "label": "Put the rate condition inside an outer join or OPTIONAL block",
+      "why": "A condition inside an outer join or OPTIONAL only decides whether the optional part attaches. Schools below 60% stay in the answer with a blank rate.",
+      "results": {
+        "SQL": {
+          "rows": [
+            [
+              "123961",
+              "University of Southern California",
+              91.8,
+              3
+            ],
+            [
+              "193900",
+              "New York University",
+              87.6,
+              1
+            ],
+            [
+              "236948",
+              "University of Washington-Seattle Campus",
+              85.2,
+              3
+            ],
+            [
+              "223232",
+              "Baylor University",
+              80.0,
+              1
+            ],
+            [
+              "132903",
+              "University of Central Florida",
+              78.0,
+              3
+            ],
+            [
+              "135081",
+              "Keiser University-Ft Lauderdale",
+              61.0,
+              3
+            ],
+            [
+              "110608",
+              "California State University-Northridge",
+              null,
+              1
+            ],
+            [
+              "183026",
+              "Southern New Hampshire University",
+              null,
+              5
+            ],
+            [
+              "199102",
+              "North Carolina A & T State University",
+              null,
+              1
+            ],
+            [
+              "433387",
+              "Western Governors University",
+              null,
+              5
+            ],
+            [
+              "449339",
+              "American Public University System",
+              null,
+              4
+            ],
+            [
+              "454227",
+              "Chamberlain University-Illinois",
+              null,
+              5
+            ],
+            [
+              "459736",
+              "Touro University California",
+              null,
+              1
+            ],
+            [
+              "484613",
+              "University of Phoenix-Arizona",
+              null,
+              7
+            ]
+          ]
+        },
+        "SPARQL": {
+          "rows": [
+            [
+              "123961",
+              "University of Southern California",
+              91.8,
+              3
+            ],
+            [
+              "193900",
+              "New York University",
+              87.6,
+              1
+            ],
+            [
+              "236948",
+              "University of Washington-Seattle Campus",
+              85.2,
+              3
+            ],
+            [
+              "223232",
+              "Baylor University",
+              80.0,
+              1
+            ],
+            [
+              "132903",
+              "University of Central Florida",
+              78.0,
+              3
+            ],
+            [
+              "135081",
+              "Keiser University-Ft Lauderdale",
+              61.0,
+              3
+            ],
+            [
+              "110608",
+              "California State University-Northridge",
+              null,
+              1
+            ],
+            [
+              "183026",
+              "Southern New Hampshire University",
+              null,
+              5
+            ],
+            [
+              "199102",
+              "North Carolina A & T State University",
+              null,
+              1
+            ],
+            [
+              "433387",
+              "Western Governors University",
+              null,
+              5
+            ],
+            [
+              "449339",
+              "American Public University System",
+              null,
+              4
+            ],
+            [
+              "454227",
+              "Chamberlain University-Illinois",
+              null,
+              5
+            ],
+            [
+              "459736",
+              "Touro University California",
+              null,
+              1
+            ],
+            [
+              "484613",
+              "University of Phoenix-Arizona",
+              null,
+              7
+            ]
+          ]
+        },
+        "Cypher": {
+          "na": "The rate is a property on the Institution node, so there is no optional match to misplace it in."
+        }
+      }
+    },
+    "negation": {
+      "label": "Ask the opposite: which schools do NOT clear 60%?",
+      "why": "Each query uses its language's usual negation. SQL and Cypher evaluate NOT (NULL > 60) as unknown and drop the school with no rate. SPARQL's NOT EXISTS asks whether a matching rate exists, finds none, and keeps it.",
+      "results": {
+        "SQL": {
+          "rows": [
+            [
+              "199102",
+              "North Carolina A & T State University",
+              57.2,
+              1
+            ],
+            [
+              "449339",
+              "American Public University System",
+              57.2,
+              4
+            ],
+            [
+              "110608",
+              "California State University-Northridge",
+              56.9,
+              1
+            ],
+            [
+              "433387",
+              "Western Governors University",
+              46.2,
+              5
+            ],
+            [
+              "183026",
+              "Southern New Hampshire University",
+              42.8,
+              5
+            ],
+            [
+              "454227",
+              "Chamberlain University-Illinois",
+              41.7,
+              5
+            ],
+            [
+              "484613",
+              "University of Phoenix-Arizona",
+              20.8,
+              7
+            ]
+          ]
+        },
+        "SPARQL": {
+          "rows": [
+            [
+              "199102",
+              "North Carolina A & T State University",
+              57.2,
+              1
+            ],
+            [
+              "449339",
+              "American Public University System",
+              57.2,
+              4
+            ],
+            [
+              "110608",
+              "California State University-Northridge",
+              56.9,
+              1
+            ],
+            [
+              "433387",
+              "Western Governors University",
+              46.2,
+              5
+            ],
+            [
+              "183026",
+              "Southern New Hampshire University",
+              42.8,
+              5
+            ],
+            [
+              "454227",
+              "Chamberlain University-Illinois",
+              41.7,
+              5
+            ],
+            [
+              "484613",
+              "University of Phoenix-Arizona",
+              20.8,
+              7
+            ],
+            [
+              "459736",
+              "Touro University California",
+              null,
+              1
+            ]
+          ]
+        },
+        "Cypher": {
+          "rows": [
+            [
+              "199102",
+              "North Carolina A & T State University",
+              57.2,
+              1
+            ],
+            [
+              "449339",
+              "American Public University System",
+              57.2,
+              4
+            ],
+            [
+              "110608",
+              "California State University-Northridge",
+              56.9,
+              1
+            ],
+            [
+              "433387",
+              "Western Governors University",
+              46.2,
+              5
+            ],
+            [
+              "183026",
+              "Southern New Hampshire University",
+              42.8,
+              5
+            ],
+            [
+              "454227",
+              "Chamberlain University-Illinois",
+              41.7,
+              5
+            ],
+            [
+              "484613",
+              "University of Phoenix-Arizona",
+              20.8,
+              7
+            ]
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,234 @@
+{
+  "engine": "graphlite 0.0.1",
+  "full_graph": false,
+  "nodes": 1062,
+  "edges": 1958,
+  "answers": {
+    "baseline": [
+      [
+        "123961",
+        "University of Southern California",
+        91.8,
+        3
+      ],
+      [
+        "193900",
+        "New York University",
+        87.6,
+        1
+      ],
+      [
+        "236948",
+        "University of Washington-Seattle Campus",
+        85.2,
+        3
+      ],
+      [
+        "223232",
+        "Baylor University",
+        80.0,
+        1
+      ],
+      [
+        "132903",
+        "University of Central Florida",
+        78.0,
+        3
+      ],
+      [
+        "135081",
+        "Keiser University-Ft Lauderdale",
+        61.0,
+        3
+      ]
+    ],
+    "bachelors": [
+      [
+        "123961",
+        "University of Southern California",
+        91.8,
+        3
+      ],
+      [
+        "193900",
+        "New York University",
+        87.8,
+        1
+      ],
+      [
+        "236948",
+        "University of Washington-Seattle Campus",
+        85.2,
+        3
+      ],
+      [
+        "223232",
+        "Baylor University",
+        80.0,
+        1
+      ],
+      [
+        "132903",
+        "University of Central Florida",
+        78.0,
+        3
+      ]
+    ],
+    "any-online": [
+      [
+        "123961",
+        "University of Southern California",
+        91.8,
+        6
+      ],
+      [
+        "204796",
+        "Ohio State University-Main Campus",
+        87.7,
+        6
+      ],
+      [
+        "193900",
+        "New York University",
+        87.6,
+        3
+      ],
+      [
+        "236948",
+        "University of Washington-Seattle Campus",
+        85.2,
+        3
+      ],
+      [
+        "223232",
+        "Baylor University",
+        80.0,
+        2
+      ],
+      [
+        "132903",
+        "University of Central Florida",
+        78.0,
+        3
+      ],
+      [
+        "122755",
+        "San Jose State University",
+        69.2,
+        2
+      ],
+      [
+        "144740",
+        "DePaul University",
+        67.8,
+        2
+      ],
+      [
+        "195809",
+        "St. John's University-New York",
+        66.1,
+        3
+      ],
+      [
+        "135081",
+        "Keiser University-Ft Lauderdale",
+        61.0,
+        4
+      ]
+    ]
+  },
+  "all_match": true,
+  "traps": {
+    "quoted-code": {
+      "rows": []
+    },
+    "proportion": {
+      "rows": [
+        [
+          "123961",
+          "University of Southern California",
+          91.8,
+          3
+        ],
+        [
+          "193900",
+          "New York University",
+          87.6,
+          1
+        ],
+        [
+          "236948",
+          "University of Washington-Seattle Campus",
+          85.2,
+          3
+        ],
+        [
+          "223232",
+          "Baylor University",
+          80.0,
+          1
+        ],
+        [
+          "132903",
+          "University of Central Florida",
+          78.0,
+          3
+        ],
+        [
+          "135081",
+          "Keiser University-Ft Lauderdale",
+          61.0,
+          3
+        ],
+        [
+          "199102",
+          "North Carolina A & T State University",
+          57.2,
+          1
+        ],
+        [
+          "449339",
+          "American Public University System",
+          57.2,
+          4
+        ],
+        [
+          "110608",
+          "California State University-Northridge",
+          56.9,
+          1
+        ],
+        [
+          "433387",
+          "Western Governors University",
+          46.2,
+          5
+        ],
+        [
+          "183026",
+          "Southern New Hampshire University",
+          42.8,
+          5
+        ],
+        [
+          "454227",
+          "Chamberlain University-Illinois",
+          41.7,
+          5
+        ],
+        [
+          "484613",
+          "University of Phoenix-Arizona",
+          20.8,
+          7
+        ]
+      ]
+    },
+    "optional-filter": {
+      "na": "The rate is a property on the Institution node, so there is no optional match to misplace it in."
+    },
+    "negation": {
+      "error": "Error: Execution error: RuntimeError(\"NOT operator requires boolean operand\")"
+    }
+  }
+}
