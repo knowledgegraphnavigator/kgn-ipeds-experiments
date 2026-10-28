@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One Question, Four Query Languages</title>
+<meta name="description" content="One question about IPEDS higher-ed data asked in SQL, SPARQL, Cypher and GQL, with the schools each version of the question returns.">
+<style>
+:root {
+  --bg: #f7f7f5; --surface: #ffffff; --surface-2: #f0f0ec; --border: #deded8;
+  --text: #1d1d1b; --muted: #66665f; --accent: #2457c5; --hl: #fff1b8; --hl-border: #e0b400;
+  --ok: #1f7a3d; --ok-bg: #e3f3e8; --warn: #8a5a00; --warn-bg: #fbefd5;
+  --match: #2457c5; --miss: #b9b9b2; --hub: #c2572b; --ring: #c2572b; --edge: #c8c8c1; --code: #2a2a27;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #141413; --surface: #1d1d1b; --surface-2: #262624; --border: #3a3a36;
+    --text: #ecece8; --muted: #a3a39b; --accent: #7aa2ff; --hl: #4a3f12; --hl-border: #c9a227;
+    --ok: #7fd49a; --ok-bg: #1b3324; --warn: #f0c36a; --warn-bg: #3a2e12;
+    --match: #7aa2ff; --miss: #5c5c56; --hub: #f08a5d; --ring: #f08a5d; --edge: #44443f; --code: #e2e2dc;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #141413; --surface: #1d1d1b; --surface-2: #262624; --border: #3a3a36;
+  --text: #ecece8; --muted: #a3a39b; --accent: #7aa2ff; --hl: #4a3f12; --hl-border: #c9a227;
+  --ok: #7fd49a; --ok-bg: #1b3324; --warn: #f0c36a; --warn-bg: #3a2e12;
+  --match: #7aa2ff; --miss: #5c5c56; --hub: #f08a5d; --ring: #f08a5d; --edge: #44443f; --code: #e2e2dc;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text);
+  font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+header, main, footer { max-width: 1500px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
+header { padding-top: 24px; }
+h1 { font-size: 26px; margin: 0 0 4px; letter-spacing: -0.01em; }
+.sub { color: var(--muted); margin: 0; max-width: 860px; }
+.question { margin: 14px 0 0; font-size: 17px; font-weight: 600; max-width: 900px; }
+.controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 16px 0 0; }
+.controls span { font-size: 13px; color: var(--muted); }
+.seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--surface); }
+.seg button { font: inherit; font-size: 13px; padding: 7px 12px; border: 0; background: transparent; color: var(--text); cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--border); }
+.seg button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+.summary { margin: 12px 0 0; font-weight: 600; }
+.why-note { margin: 6px 0 0; max-width: 900px; color: var(--muted); }
+.chips { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+.chip { font-size: 12px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); }
+.chip.cur { border-color: var(--accent); color: var(--accent); font-weight: 600; }
+main { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 16px; padding-top: 16px; padding-bottom: 24px; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; min-width: 0; }
+.card .head { padding: 12px 14px; border-bottom: 1px solid var(--border); }
+.card h2 { font-size: 15px; margin: 0; }
+.card .head p { margin: 2px 0 0; font-size: 13px; color: var(--muted); }
+.tabs { display: flex; gap: 4px; padding: 8px 10px 0; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+.tabs button { font: inherit; font-size: 14px; font-weight: 600; padding: 8px 12px; border: 1px solid transparent;
+  border-bottom: 0; border-radius: 8px 8px 0 0; background: transparent; color: var(--muted); cursor: pointer; }
+.tabs button[aria-selected="true"] { background: var(--surface-2); color: var(--text); border-color: var(--border); }
+.status { padding: 8px 14px; font-size: 13px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; background: var(--surface-2); }
+.badge { display: inline-block; font-size: 12px; padding: 2px 8px; border-radius: 999px; }
+.badge.ok { background: var(--ok-bg); color: var(--ok); }
+.badge.warn { background: var(--warn-bg); color: var(--warn); }
+pre { margin: 0; padding: 10px 0; overflow: auto; background: var(--surface-2); border-radius: 0 0 10px 10px;
+  font: 12.5px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--code); max-height: 560px; }
+pre .ln { display: block; padding: 0 14px; white-space: pre; border-left: 3px solid transparent; }
+pre .ln.changed { background: var(--hl); border-left-color: var(--hl-border); }
+#graph { overflow-x: auto; }
+#graph svg { width: 100%; min-width: 620px; height: auto; display: block; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; padding: 8px 14px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--border); }
+.legend .sw { display: inline-block; width: 18px; vertical-align: middle; margin-right: 6px; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th, td { text-align: left; padding: 6px 14px; border-top: 1px solid var(--border); vertical-align: top; }
+th { color: var(--muted); font-weight: 600; }
+td.num { font-variant-numeric: tabular-nums; }
+tr.in td:first-child { font-weight: 600; color: var(--match); }
+.why { color: var(--muted); }
+.node-label { font-size: 13px; fill: var(--text); paint-order: stroke; stroke: var(--surface); stroke-width: 3px; stroke-linejoin: round; }
+.node-label.miss { fill: var(--muted); }
+.ring-label { font-size: 10px; fill: var(--ring); }
+footer { padding-bottom: 32px; font-size: 13px; color: var(--muted); }
+footer a { color: var(--accent); }
+@media (max-width: 980px) {
+  main { grid-template-columns: 1fr; }
+  header, main, footer { padding-left: 16px; padding-right: 16px; }
+  th, td { padding: 6px 10px; }
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>One Question, Four Query Languages</h1>
+  <p class="sub">The same question asked of the same IPEDS 2024 data in SQL, SPARQL, Cypher and ISO GQL. The four languages agree. The definitions move the answer, and so do small slips in how a query is written.</p>
+  <p class="question">Which schools offer a fully online master's in the health professions and graduate more than 60% of their students within six years?</p>
+  <div class="controls">
+    <span>How do you define the question?</span>
+    <div class="seg" role="group" aria-label="Modeling choice" id="variants"></div>
+  </div>
+  <div class="controls">
+    <span>Or make one small slip in how it's written:</span>
+    <div class="seg" role="group" aria-label="Small edits" id="traps"></div>
+  </div>
+  <p class="summary" id="summary"></p>
+  <p class="why-note" id="whynote" hidden></p>
+</header>
+<main>
+  <section class="card" aria-label="Queries">
+    <div class="tabs" role="tablist" id="tabs"></div>
+    <div class="status" id="status"></div>
+    <pre id="code" tabindex="0"></pre>
+  </section>
+  <section class="card" aria-label="Answer">
+    <div class="head">
+      <h2 id="graphTitle">The answer, as a graph</h2>
+      <p>Every school with a partly or fully online health master's. Distance from the center is the six-year graduation rate: schools inside the ring clear 60%.</p>
+    </div>
+    <div id="graph"></div>
+    <div class="legend">
+      <span><svg class="sw" height="10"><line x1="0" y1="5" x2="18" y2="5" stroke="currentColor" stroke-width="2"/></svg>Fully online program(s)</span>
+      <span><svg class="sw" height="10"><line x1="0" y1="5" x2="18" y2="5" stroke="currentColor" stroke-width="2" stroke-dasharray="3 3"/></svg>Partly online only</span>
+      <span><svg class="sw" height="10"><circle cx="9" cy="5" r="5" fill="var(--match)"/></svg>In the answer</span>
+      <span><svg class="sw" height="10"><circle cx="9" cy="5" r="5" fill="var(--miss)"/></svg>Not in the answer</span>
+      <span><svg class="sw" height="10"><line x1="0" y1="5" x2="18" y2="5" stroke="var(--ring)" stroke-width="1.5" stroke-dasharray="4 3"/></svg>60% graduation-rate threshold</span>
+    </div>
+    <table>
+      <thead><tr><th>School</th><th>Six-year rate</th><th>Online health master's</th><th>Why</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </section>
+</main>
+<footer>
+  Data: NCES IPEDS 2024 collection year (public domain). Part of the
+  <a href="https://github.com/knowledgegraphnavigator/kgn-ipeds-experiments">kgn-ipeds-experiments</a> series from
+  <a href="https://knowledgegraphnavigator.com">KnowledgeGraphNavigator.com</a>.
+</footer>
+<script>
+const DATA = /*__DATA__*/null;
+const LANGS = ["SQL", "SPARQL", "Cypher", "GQL"];
+const ENGINE = {SQL: "DuckDB", SPARQL: "rdflib", Cypher: "Kùzu"};
+const VLABEL = {"baseline": "Strict: fully online, all students", "bachelors": "Bachelor's graduation rate", "any-online": "Partly online counts"};
+const TLABEL = {"quoted-code": "51 instead of '51'", "proportion": "> 0.6 instead of > 60",
+  "optional-filter": "Filter inside OPTIONAL / LEFT JOIN", "negation": "Ask the opposite (NOT)"};
+let variant = "baseline", lang = "SQL", trap = null;
+const NS = "http://www.w3.org/2000/svg";
+
+const vEl = document.getElementById("variants");
+Object.keys(DATA.variants).forEach(v => {
+  const b = document.createElement("button");
+  b.textContent = VLABEL[v] || v; b.dataset.v = v;
+  b.onclick = () => { variant = v; trap = null; render(); };
+  vEl.appendChild(b);
+});
+const trEl = document.getElementById("traps");
+Object.keys(DATA.traps).forEach(t => {
+  const b = document.createElement("button");
+  b.textContent = TLABEL[t] || t; b.dataset.t = t;
+  b.onclick = () => { trap = t; variant = "baseline"; render(); };
+  trEl.appendChild(b);
+});
+const tEl = document.getElementById("tabs");
+LANGS.forEach(l => {
+  const b = document.createElement("button");
+  b.textContent = l; b.setAttribute("role", "tab"); b.dataset.l = l;
+  b.onclick = () => { lang = l; render(); };
+  tEl.appendChild(b);
+});
+
+function rateOf(c) { return variant === "bachelors" && !trap ? c.rateBach : c.rateAll; }
+function resultText(r) {
+  if (r.answer) return `${r.n} school${r.n === 1 ? "" : "s"}`;
+  if (r.error) return "error";
+  return "n/a";
+}
+function reason(c, inAns) {
+  const r = rateOf(c);
+  const online = variant === "any-online" ? (c.fully + c.some) > 0 : c.fully > 0;
+  if (inAns) return "Meets both conditions";
+  const why = [];
+  if (!online) why.push("only partly online");
+  if (r === null) why.push("no graduation rate (graduate-only school)");
+  else if (r <= 60) why.push(`rate ${r}% is not above 60%`);
+  return why.join("; ");
+}
+
+function render() {
+  const base = DATA.variants.baseline;
+  [...vEl.children].forEach(b => b.setAttribute("aria-pressed", !trap && b.dataset.v === variant));
+  [...trEl.children].forEach(b => b.setAttribute("aria-pressed", b.dataset.t === trap));
+  [...tEl.children].forEach(b => b.setAttribute("aria-selected", b.dataset.l === lang));
+  const st = document.getElementById("status"), note = document.getElementById("whynote");
+  let text, answer, changedFrom = trap || variant !== "baseline";
+
+  if (trap) {
+    const T = DATA.traps[trap], R = T.results;
+    text = T.texts[lang];
+    const counts = LANGS.map(l => `${l} ${resultText(R[l])}`);
+    const distinct = new Set(LANGS.filter(l => R[l].answer).map(l => R[l].answer.join(",")));
+    document.getElementById("summary").textContent =
+      `${/[?.]$/.test(T.label) ? T.label : T.label + "."} Baseline: ${base.answer.length} schools. Now: ${counts.join(" · ")}` +
+      (distinct.size > 1 ? ". The languages disagree." : ".");
+    note.hidden = false; note.textContent = T.why;
+    const r = R[lang];
+    const engine = lang === "GQL" ? "GraphLite" : ENGINE[lang];
+    if (r.answer) {
+      st.innerHTML = `<span class="badge ${r.n === base.answer.length && r.answer.join() === base.answer.join() ? "ok" : "warn"}">Executed in ${engine}</span><span>${r.n} rows (baseline ${base.answer.length})</span>`;
+      answer = r.answer;
+    } else {
+      st.innerHTML = `<span class="badge warn">${r.error ? "Error in " + engine : "Not applicable"}</span><span></span>`;
+      st.lastChild.textContent = r.error || r.na;
+      answer = [];
+    }
+    document.getElementById("graphTitle").textContent = `${lang}'s answer, as a graph`;
+  } else {
+    const V = DATA.variants[variant];
+    text = V.texts[lang]; answer = V.answer; note.hidden = true;
+    document.getElementById("summary").textContent =
+      `${V.answer.length} schools. ${DATA.gql && DATA.gql.match[variant] ? "SQL, SPARQL, Cypher and GQL" : "SQL, SPARQL and Cypher"} ${V.agree ? "return the identical list" : "disagree"} under this definition.`;
+    if (lang === "GQL" && !DATA.gql) {
+      st.innerHTML = '<span class="badge warn">Written, not executed</span><span>Run run_gql.py with GraphLite installed to execute it.</span>';
+    } else if (lang === "GQL") {
+      const ok = DATA.gql.match[variant];
+      st.innerHTML = `<span class="badge ${ok ? "ok" : "warn"}">Executed in GraphLite</span><span>${V.answer.length} rows, ${ok ? "same as the other languages" : "different from the other languages"}</span>`;
+    } else {
+      st.innerHTML = `<span class="badge ok">Executed in ${ENGINE[lang]}</span><span>${V.answer.length} rows, same as the other languages</span>`;
+    }
+    document.getElementById("graphTitle").textContent = "The answer, as a graph";
+  }
+
+  const baseLines = new Set(base.texts[lang].split("\n"));
+  const pre = document.getElementById("code"); pre.innerHTML = "";
+  text.split("\n").forEach(line => {
+    const s = document.createElement("span");
+    s.className = "ln" + (changedFrom && !baseLines.has(line) ? " changed" : "");
+    s.textContent = line || " ";
+    pre.appendChild(s);
+  });
+
+  const ans = new Set(answer);
+  drawGraph(ans);
+  const tb = document.getElementById("rows"); tb.innerHTML = "";
+  const sorted = DATA.candidates.slice().sort((a, b) => (rateOf(b) ?? -1) - (rateOf(a) ?? -1));
+  sorted.forEach(c => {
+    const inAns = ans.has(c.unitid);
+    const tr = document.createElement("tr"); if (inAns) tr.className = "in";
+    const r = rateOf(c);
+    const why = trap ? (inAns ? `Returned by ${lang}` : `Not returned by ${lang}`) : reason(c, inAns);
+    const cells = [c.name, r === null ? "n/a" : r + "%",
+      `${c.fully} fully` + (c.some ? `, ${c.some} partly` : ""), why];
+    cells.forEach((t, i) => { const td = document.createElement("td"); td.textContent = t;
+      if (i === 1) td.className = "num"; if (i === 3) td.className = "why"; tr.appendChild(td); });
+    tb.appendChild(tr);
+  });
+}
+
+function el(tag, attrs, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+
+function drawGraph(answer) {
+  const W = 900, H = 760, cx = W / 2, cy = H / 2, R0 = 78, R1 = 300;
+  const box = document.getElementById("graph"); box.innerHTML = "";
+  const svg = el("svg", {viewBox: `0 0 ${W} ${H}`, role: "img",
+    "aria-label": `Graph of ${DATA.candidates.length} schools around the health professions master's node; ${answer.size} are in the answer.`}, box);
+  const rad = r => r === null ? R1 + 40 : R0 + (100 - r) / 80 * (R1 - R0);
+  const ring = rad(60);
+  el("circle", {cx, cy, r: ring, fill: "none", stroke: "var(--ring)", "stroke-dasharray": "5 5", "stroke-width": 1.5}, svg);
+
+  // Interleave high and low rates around the circle so neighbors sit at
+  // clearly different distances from the hub and their labels don't collide.
+  const byRate = DATA.candidates.slice().sort((a, b) => (rateOf(b) ?? -1) - (rateOf(a) ?? -1) || a.name.localeCompare(b.name));
+  const list = [];
+  for (let i = 0, j = byRate.length - 1; i <= j; i++, j--) { list.push(byRate[i]); if (i !== j) list.push(byRate[j]); }
+  list.forEach((c, i) => {
+    const a = -Math.PI / 2 + i / list.length * Math.PI * 2;
+    const r = rad(rateOf(c));
+    c._x = cx + Math.cos(a) * r; c._y = cy + Math.sin(a) * r; c._a = a;
+  });
+  // Fit the view to what is drawn.
+  const ys = list.map(c => c._y).concat([cy - ring, cy + ring]);
+  const top = Math.min(...ys) - 28, bottom = Math.max(...ys) + 28;
+  svg.setAttribute("viewBox", `0 ${top} ${W} ${bottom - top}`);
+  list.forEach(c => {
+    const inAns = answer.has(c.unitid);
+    const fullyOnly = c.fully > 0;
+    el("line", {x1: cx, y1: cy, x2: c._x, y2: c._y, stroke: inAns ? "var(--match)" : "var(--edge)",
+      "stroke-width": Math.min(1 + (c.fully + c.some) * 0.6, 5), "stroke-dasharray": fullyOnly ? "" : "4 4",
+      opacity: inAns ? 0.9 : 0.8}, svg);
+  });
+  const hub = el("circle", {cx, cy, r: 44, fill: "var(--hub)"}, svg);
+  [["Health", 700, -8], ["professions", 700, 6], ["master's", 400, 20]].forEach(([t, w, dy]) => {
+    const e = el("text", {x: cx, y: cy + dy - 4, "text-anchor": "middle", fill: "#fff", "font-size": 12, "font-weight": w}, svg);
+    e.textContent = t;
+  });
+
+  list.forEach(c => {
+    const inAns = answer.has(c.unitid);
+    const g = el("g", {}, svg);
+    const t = el("title", {}, g); const r = rateOf(c);
+    t.textContent = `${c.name}\nSix-year rate: ${r === null ? "n/a" : r + "%"}\n${c.fully} fully online, ${c.some} partly online`;
+    el("circle", {cx: c._x, cy: c._y, r: inAns ? 9 : 7, fill: inAns ? "var(--match)" : "var(--miss)",
+      stroke: "var(--surface)", "stroke-width": 2}, g);
+    const right = Math.cos(c._a) >= 0;
+    const lbl = el("text", {x: c._x + (right ? 12 : -12), y: c._y + 4, "text-anchor": right ? "start" : "end",
+      class: "node-label" + (inAns ? "" : " miss"), "font-weight": inAns ? 700 : 400}, g);
+    lbl.textContent = `${c.short} ${r === null ? "(n/a)" : r + "%"}`;
+  });
+}
+render();
+</script>
+</body>
+</html>
