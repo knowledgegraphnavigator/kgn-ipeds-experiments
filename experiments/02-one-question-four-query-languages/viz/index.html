@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One Question, Four Query Languages</title>
+<meta name="description" content="One question about IPEDS higher-ed data asked in SQL, SPARQL, Cypher and GQL, with the schools each version of the question returns.">
+<style>
+:root {
+  --bg: #f7f7f5; --surface: #ffffff; --surface-2: #f0f0ec; --border: #deded8;
+  --text: #1d1d1b; --muted: #66665f; --accent: #2457c5; --hl: #fff1b8; --hl-border: #e0b400;
+  --ok: #1f7a3d; --ok-bg: #e3f3e8; --warn: #8a5a00; --warn-bg: #fbefd5;
+  --match: #2457c5; --miss: #b9b9b2; --hub: #c2572b; --ring: #c2572b; --edge: #c8c8c1; --code: #2a2a27;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #141413; --surface: #1d1d1b; --surface-2: #262624; --border: #3a3a36;
+    --text: #ecece8; --muted: #a3a39b; --accent: #7aa2ff; --hl: #4a3f12; --hl-border: #c9a227;
+    --ok: #7fd49a; --ok-bg: #1b3324; --warn: #f0c36a; --warn-bg: #3a2e12;
+    --match: #7aa2ff; --miss: #5c5c56; --hub: #f08a5d; --ring: #f08a5d; --edge: #44443f; --code: #e2e2dc;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #141413; --surface: #1d1d1b; --surface-2: #262624; --border: #3a3a36;
+  --text: #ecece8; --muted: #a3a39b; --accent: #7aa2ff; --hl: #4a3f12; --hl-border: #c9a227;
+  --ok: #7fd49a; --ok-bg: #1b3324; --warn: #f0c36a; --warn-bg: #3a2e12;
+  --match: #7aa2ff; --miss: #5c5c56; --hub: #f08a5d; --ring: #f08a5d; --edge: #44443f; --code: #e2e2dc;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text);
+  font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+header, main, footer { max-width: 1500px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
+header { padding-top: 24px; }
+h1 { font-size: 26px; margin: 0 0 4px; letter-spacing: -0.01em; }
+.sub { color: var(--muted); margin: 0; max-width: 860px; }
+.question { margin: 14px 0 0; font-size: 17px; font-weight: 600; max-width: 900px; }
+.controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 16px 0 0; }
+.controls span { font-size: 13px; color: var(--muted); }
+.seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--surface); }
+.seg button { font: inherit; font-size: 13px; padding: 7px 12px; border: 0; background: transparent; color: var(--text); cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--border); }
+.seg button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+.summary { margin: 12px 0 0; font-weight: 600; }
+.why-note { margin: 6px 0 0; max-width: 900px; color: var(--muted); }
+.chips { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+.chip { font-size: 12px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); }
+.chip.cur { border-color: var(--accent); color: var(--accent); font-weight: 600; }
+main { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 16px; padding-top: 16px; padding-bottom: 24px; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; min-width: 0; }
+.card .head { padding: 12px 14px; border-bottom: 1px solid var(--border); }
+.card h2 { font-size: 15px; margin: 0; }
+.card .head p { margin: 2px 0 0; font-size: 13px; color: var(--muted); }
+.tabs { display: flex; gap: 4px; padding: 8px 10px 0; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+.tabs button { font: inherit; font-size: 14px; font-weight: 600; padding: 8px 12px; border: 1px solid transparent;
+  border-bottom: 0; border-radius: 8px 8px 0 0; background: transparent; color: var(--muted); cursor: pointer; }
+.tabs button[aria-selected="true"] { background: var(--surface-2); color: var(--text); border-color: var(--border); }
+.status { padding: 8px 14px; font-size: 13px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; background: var(--surface-2); }
+.badge { display: inline-block; font-size: 12px; padding: 2px 8px; border-radius: 999px; }
+.badge.ok { background: var(--ok-bg); color: var(--ok); }
+.badge.warn { background: var(--warn-bg); color: var(--warn); }
+pre { margin: 0; padding: 10px 0; overflow: auto; background: var(--surface-2); border-radius: 0 0 10px 10px;
+  font: 12.5px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--code); max-height: 560px; }
+pre .ln { display: block; padding: 0 14px; white-space: pre; border-left: 3px solid transparent; }
+pre .ln.changed { background: var(--hl); border-left-color: var(--hl-border); }
+#graph { overflow-x: auto; }
+#graph svg { width: 100%; min-width: 620px; height: auto; display: block; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; padding: 8px 14px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--border); }
+.legend .sw { display: inline-block; width: 18px; vertical-align: middle; margin-right: 6px; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th, td { text-align: left; padding: 6px 14px; border-top: 1px solid var(--border); vertical-align: top; }
+th { color: var(--muted); font-weight: 600; }
+td.num { font-variant-numeric: tabular-nums; }
+tr.in td:first-child { font-weight: 600; color: var(--match); }
+.why { color: var(--muted); }
+.node-label { font-size: 13px; fill: var(--text); paint-order: stroke; stroke: var(--surface); stroke-width: 3px; stroke-linejoin: round; }
+.node-label.miss { fill: var(--muted); }
+.ring-label { font-size: 10px; fill: var(--ring); }
+footer { padding-bottom: 32px; font-size: 13px; color: var(--muted); }
+footer a { color: var(--accent); }
+@media (max-width: 980px) {
+  main { grid-template-columns: 1fr; }
+  header, main, footer { padding-left: 16px; padding-right: 16px; }
+  th, td { padding: 6px 10px; }
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>One Question, Four Query Languages</h1>
+  <p class="sub">The same question asked of the same IPEDS 2024 data in SQL, SPARQL, Cypher and ISO GQL. The four languages agree. The definitions move the answer, and so do small slips in how a query is written.</p>
+  <p class="question">Which schools offer a fully online master's in the health professions and graduate more than 60% of their students within six years?</p>
+  <div class="controls">
+    <span>How do you define the question?</span>
+    <div class="seg" role="group" aria-label="Modeling choice" id="variants"></div>
+  </div>
+  <div class="controls">
+    <span>Or make one small slip in how it's written:</span>
+    <div class="seg" role="group" aria-label="Small edits" id="traps"></div>
+  </div>
+  <p class="summary" id="summary"></p>
+  <p class="why-note" id="whynote" hidden></p>
+</header>
+<main>
+  <section class="card" aria-label="Queries">
+    <div class="tabs" role="tablist" id="tabs"></div>
+    <div class="status" id="status"></div>
+    <pre id="code" tabindex="0"></pre>
+  </section>
+  <section class="card" aria-label="Answer">
+    <div class="head">
+      <h2 id="graphTitle">The answer, as a graph</h2>
+      <p>Every school with a partly or fully online health master's. Distance from the center is the six-year graduation rate: schools inside the ring clear 60%.</p>
+    </div>
+    <div id="graph"></div>
+    <div class="legend">
+      <span><svg class="sw" height="10"><line x1="0" y1="5" x2="18" y2="5" stroke="currentColor" stroke-width="2"/></svg>Fully online program(s)</span>
+      <span><svg class="sw" height="10"><line x1="0" y1="5" x2="18" y2="5" stroke="currentColor" stroke-width="2" stroke-dasharray="3 3"/></svg>Partly online only</span>
+      <span><svg class="sw" height="10"><circle cx="9" cy="5" r="5" fill="var(--match)"/></svg>In the answer</span>
+      <span><svg class="sw" height="10"><circle cx="9" cy="5" r="5" fill="var(--miss)"/></svg>Not in the answer</span>
+      <span><svg class="sw" height="10"><line x1="0" y1="5" x2="18" y2="5" stroke="var(--ring)" stroke-width="1.5" stroke-dasharray="4 3"/></svg>60% graduation-rate threshold</span>
+    </div>
+    <table>
+      <thead><tr><th>School</th><th>Six-year rate</th><th>Online health master's</th><th>Why</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </section>
+</main>
+<footer>
+  Data: NCES IPEDS 2024 collection year (public domain). Part of the
+  <a href="https://github.com/knowledgegraphnavigator/kgn-ipeds-experiments">kgn-ipeds-experiments</a> series from
+  <a href="https://knowledgegraphnavigator.com">KnowledgeGraphNavigator.com</a>.
+</footer>
+<script>
+const DATA = {"variants": {"baseline": {"label": "Fully online programs; all-student six-year rate", "answer": ["123961", "193900", "236948", "223232", "132903", "135081"], "agree": true, "texts": {"SQL": "-- Which schools offer a fully online master's in the health professions\n-- and graduate more than 60% of their students within six years?\n--\n-- SQL (DuckDB), run directly against the IPEDS CSVs.\nSELECT\n    i.UNITID                        AS unitid,\n    i.name                          AS institution,\n    o.gr4_rate_150_all_pct          AS grad_rate_6yr,\n    count(*)                        AS online_health_masters\nFROM programs      AS p\nJOIN institutions  AS i ON i.UNITID = p.UNITID\nJOIN outcomes      AS o ON o.UNITID = p.UNITID\nWHERE p.cip_2digit = '51'                       -- Health Professions\n  AND p.awlevel_code = 7                        -- Master's degree\n  AND p.programs_offered_fully_distance > 0     -- offered fully online\n  AND o.gr4_rate_150_all_pct > 60               -- 150% of normal time = 6 years\nGROUP BY i.UNITID, i.name, o.gr4_rate_150_all_pct\nORDER BY grad_rate_6yr DESC;\n", "SPARQL": "# Which schools offer a fully online master's in the health professions\n# and graduate more than 60% of their students within six years?\n#\n# SPARQL (rdflib), against an RDF graph built from the same CSVs.\nPREFIX schema: <https://schema.org/>\nPREFIX kgn:    <https://knowledgegraphnavigator.com/vocab/ipeds#>\n\nSELECT ?unitid ?institution ?gradRate6yr (COUNT(?program) AS ?onlineHealthMasters)\nWHERE {\n  ?program a schema:EducationalOccupationalProgram ;\n           schema:provider          ?school ;\n           kgn:cipFamily            ?family ;\n           kgn:awardLevelCode       7 ;          # Master's degree\n           kgn:fullyDistancePrograms ?online .\n  ?family  kgn:cipCode              \"51\" .       # Health Professions\n  ?school  schema:name              ?institution ;\n           kgn:unitid               ?unitid ;\n           kgn:gradRate150All       ?gradRate6yr .\n  FILTER (?online > 0 && ?gradRate6yr > 60)\n}\nGROUP BY ?unitid ?institution ?gradRate6yr\nORDER BY DESC(?gradRate6yr)\n", "Cypher": "// Which schools offer a fully online master's in the health professions\n// and graduate more than 60% of their students within six years?\n//\n// Cypher (Kuzu), against a labeled property graph built from the same CSVs.\nMATCH (i:Institution)-[:OFFERS]->(o:Offering)-[:IN_FAMILY]->(f:CipFamily {code: '51'})\nWHERE o.awardLevelCode = 7\n  AND o.fullyDistance > 0\n  AND i.gradRate150All > 60\nRETURN i.unitid         AS unitid,\n       i.name           AS institution,\n       i.gradRate150All AS gradRate6yr,\n       count(o)         AS onlineHealthMasters\nORDER BY gradRate6yr DESC;\n", "GQL": "// Which schools offer a fully online master's in the health professions\n// and graduate more than 60% of their students within six years?\n//\n// ISO/IEC 39075:2024 GQL, against the same property graph schema as the\n// Cypher query. Executed with GraphLite (see run_gql.py and the README).\nMATCH (i:Institution)-[:OFFERS]->(o:Offering)-[:IN_FAMILY]->(f:CipFamily {code: '51'})\nWHERE o.awardLevelCode = 7\n  AND o.fullyDistance > 0\n  AND i.gradRate150All > 60\nRETURN i.unitid         AS unitid,\n       i.name           AS institution,\n       i.gradRate150All AS gradRate6yr,\n       count(o)         AS onlineHealthMasters\nGROUP BY i.unitid, i.name, i.gradRate150All\nORDER BY gradRate6yr DESC;\n"}}, "bachelors": {"label": "Fully online programs; bachelor's-seeking six-year rate", "answer": ["123961", "193900", "236948", "223232", "132903"], "agree": true, "texts": {"SQL": "-- Which schools offer a fully online master's in the health professions\n-- and graduate more than 60% of their students within six years?\n--\n-- SQL (DuckDB), run directly against the IPEDS CSVs.\nSELECT\n    i.UNITID                        AS unitid,\n    i.name                          AS institution,\n    o.gr4_rate_150_bach_pct          AS grad_rate_6yr,\n    count(*)                        AS online_health_masters\nFROM programs      AS p\nJOIN institutions  AS i ON i.UNITID = p.UNITID\nJOIN outcomes      AS o ON o.UNITID = p.UNITID\nWHERE p.cip_2digit = '51'                       -- Health Professions\n  AND p.awlevel_code = 7                        -- Master's degree\n  AND p.programs_offered_fully_distance > 0     -- offered fully online\n  AND o.gr4_rate_150_bach_pct > 60               -- 150% of normal time = 6 years\nGROUP BY i.UNITID, i.name, o.gr4_rate_150_bach_pct\nORDER BY grad_rate_6yr DESC;\n", "SPARQL": "# Which schools offer a fully online master's in the health professions\n# and graduate more than 60% of their students within six years?\n#\n# SPARQL (rdflib), against an RDF graph built from the same CSVs.\nPREFIX schema: <https://schema.org/>\nPREFIX kgn:    <https://knowledgegraphnavigator.com/vocab/ipeds#>\n\nSELECT ?unitid ?institution ?gradRate6yr (COUNT(?program) AS ?onlineHealthMasters)\nWHERE {\n  ?program a schema:EducationalOccupationalProgram ;\n           schema:provider          ?school ;\n           kgn:cipFamily            ?family ;\n           kgn:awardLevelCode       7 ;          # Master's degree\n           kgn:fullyDistancePrograms ?online .\n  ?family  kgn:cipCode              \"51\" .       # Health Professions\n  ?school  schema:name              ?institution ;\n           kgn:unitid               ?unitid ;\n           kgn:gradRate150Bach       ?gradRate6yr .\n  FILTER (?online > 0 && ?gradRate6yr > 60)\n}\nGROUP BY ?unitid ?institution ?gradRate6yr\nORDER BY DESC(?gradRate6yr)\n", "Cypher": "// Which schools offer a fully online master's in the health professions\n// and graduate more than 60% of their students within six years?\n//\n// Cypher (Kuzu), against a labeled property graph built from the same CSVs.\nMATCH (i:Institution)-[:OFFERS]->(o:Offering)-[:IN_FAMILY]->(f:CipFamily {code: '51'})\nWHERE o.awardLevelCode = 7\n  AND o.fullyDistance > 0\n  AND i.gradRate150Bach > 60\nRETURN i.unitid         AS unitid,\n       i.name           AS institution,\n       i.gradRate150Bach AS gradRate6yr,\n       count(o)         AS onlineHealthMasters\nORDER BY gradRate6yr DESC;\n", "GQL": "// Which schools offer a fully online master's in the health professions\n// and graduate more than 60% of their students within six years?\n//\n// ISO/IEC 39075:2024 GQL, against the same property graph schema as the\n// Cypher query. Executed with GraphLite (see run_gql.py and the README).\nMATCH (i:Institution)-[:OFFERS]->(o:Offering)-[:IN_FAMILY]->(f:CipFamily {code: '51'})\nWHERE o.awardLevelCode = 7\n  AND o.fullyDistance > 0\n  AND i.gradRate150Bach > 60\nRETURN i.unitid         AS unitid,\n       i.name           AS institution,\n       i.gradRate150Bach AS gradRate6yr,\n       count(o)         AS onlineHealthMasters\nGROUP BY i.unitid, i.name, i.gradRate150Bach\nORDER BY gradRate6yr DESC;\n"}}, "any-online": {"label": "Fully or partly online programs; all-student six-year rate", "answer": ["123961", "204796", "193900", "236948", "223232", "132903", "122755", "144740", "195809", "135081"], "agree": true, "texts": {"SQL": "-- Which schools offer a fully online master's in the health professions\n-- and graduate more than 60% of their students within six years?\n--\n-- SQL (DuckDB), run directly against the IPEDS CSVs.\nSELECT\n    i.UNITID                        AS unitid,\n    i.name                          AS institution,\n    o.gr4_rate_150_all_pct          AS grad_rate_6yr,\n    count(*)                        AS online_health_masters\nFROM programs      AS p\nJOIN institutions  AS i ON i.UNITID = p.UNITID\nJOIN outcomes      AS o ON o.UNITID = p.UNITID\nWHERE p.cip_2digit = '51'                       -- Health Professions\n  AND p.awlevel_code = 7                        -- Master's degree\n  AND (p.programs_offered_fully_distance > 0 OR p.programs_offered_some_distance > 0)\n  AND o.gr4_rate_150_all_pct > 60               -- 150% of normal time = 6 years\nGROUP BY i.UNITID, i.name, o.gr4_rate_150_all_pct\nORDER BY grad_rate_6yr DESC;\n", "SPARQL": "# Which schools offer a fully online master's in the health professions\n# and graduate more than 60% of their students within six years?\n#\n# SPARQL (rdflib), against an RDF graph built from the same CSVs.\nPREFIX schema: <https://schema.org/>\nPREFIX kgn:    <https://knowledgegraphnavigator.com/vocab/ipeds#>\n\nSELECT ?unitid ?institution ?gradRate6yr (COUNT(?program) AS ?onlineHealthMasters)\nWHERE {\n  ?program a schema:EducationalOccupationalProgram ;\n           schema:provider          ?school ;\n           kgn:cipFamily            ?family ;\n           kgn:awardLevelCode       7 ;          # Master's degree\n           kgn:fullyDistancePrograms ?full ;\n           kgn:someDistancePrograms ?some .\n  ?family  kgn:cipCode              \"51\" .       # Health Professions\n  ?school  schema:name              ?institution ;\n           kgn:unitid               ?unitid ;\n           kgn:gradRate150All       ?gradRate6yr .\n  FILTER ((?full + ?some) > 0 && ?gradRate6yr > 60)\n}\nGROUP BY ?unitid ?institution ?gradRate6yr\nORDER BY DESC(?gradRate6yr)\n", "Cypher": "// Which schools offer a fully online master's in the health professions\n// and graduate more than 60% of their students within six years?\n//\n// Cypher (Kuzu), against a labeled property graph built from the same CSVs.\nMATCH (i:Institution)-[:OFFERS]->(o:Offering)-[:IN_FAMILY]->(f:CipFamily {code: '51'})\nWHERE o.awardLevelCode = 7\n  AND (o.fullyDistance > 0 OR o.someDistance > 0)\n  AND i.gradRate150All > 60\nRETURN i.unitid         AS unitid,\n       i.name           AS institution,\n       i.gradRate150All AS gradRate6yr,\n       count(o)         AS onlineHealthMasters\nORDER BY gradRate6yr DESC;\n", "GQL": "// Which schools offer a fully online master's in the health professions\n// and graduate more than 60% of their students within six years?\n//\n// ISO/IEC 39075:2024 GQL, against the same property graph schema as the\n// Cypher query. Executed with GraphLite (see run_gql.py and the README).\nMATCH (i:Institution)-[:OFFERS]->(o:Offering)-[:IN_FAMILY]->(f:CipFamily {code: '51'})\nWHERE o.awardLevelCode = 7\n  AND (o.fullyDistance > 0 OR o.someDistance > 0)\n  AND i.gradRate150All > 60\nRETURN i.unitid         AS unitid,\n       i.name           AS institution,\n       i.gradRate150All AS gradRate6yr,\n       count(o)         AS onlineHealthMasters\nGROUP BY i.unitid, i.name, i.gradRate150All\nORDER BY gradRate6yr DESC;\n"}}}, "candidates": [{"unitid": "110608", "name": "California State University-Northridge", "sector": "Public, 4-year or above", "rateAll": 56.9, "rateBach": 56.9, "fully": 1, "some": 0, "cips": [{"cip": "51.0201", "mode": "fully"}], "short": "CSUN"}, {"unitid": "122755", "name": "San Jose State University", "sector": "Public, 4-year or above", "rateAll": 69.2, "rateBach": 69.2, "fully": 0, "some": 2, "cips": [{"cip": "51.0203", "mode": "some"}, {"cip": "51.2201", "mode": "some"}], "short": "San Jose State"}, {"unitid": "123961", "name": "University of Southern California", "sector": "Private not-for-profit, 4-year or above", "rateAll": 91.8, "rateBach": 91.8, "fully": 3, "some": 3, "cips": [{"cip": "51.0503", "mode": "fully"}, {"cip": "51.0504", "mode": "fully"}, {"cip": "51.0599", "mode": "some"}, {"cip": "51.0701", "mode": "some"}, {"cip": "51.2201", "mode": "some"}, {"cip": "51.9999", "mode": "fully"}], "short": "USC"}, {"unitid": "132903", "name": "University of Central Florida", "sector": "Public, 4-year or above", "rateAll": 78.0, "rateBach": 78.0, "fully": 3, "some": 0, "cips": [{"cip": "51.0000", "mode": "fully"}, {"cip": "51.0706", "mode": "fully"}, {"cip": "51.3801", "mode": "fully"}], "short": "UCF"}, {"unitid": "135081", "name": "Keiser University-Ft Lauderdale", "sector": "Private not-for-profit, 4-year or above", "rateAll": 61.0, "rateBach": 57.7, "fully": 3, "some": 1, "cips": [{"cip": "51.1508", "mode": "fully"}, {"cip": "51.3802", "mode": "fully"}, {"cip": "51.3804", "mode": "some"}, {"cip": "51.3805", "mode": "fully"}], "short": "Keiser"}, {"unitid": "144740", "name": "DePaul University", "sector": "Private not-for-profit, 4-year or above", "rateAll": 67.8, "rateBach": 67.8, "fully": 0, "some": 2, "cips": [{"cip": "51.2706", "mode": "some"}, {"cip": "51.3801", "mode": "some"}], "short": "DePaul"}, {"unitid": "183026", "name": "Southern New Hampshire University", "sector": "Private not-for-profit, 4-year or above", "rateAll": 42.8, "rateBach": 45.4, "fully": 5, "some": 0, "cips": [{"cip": "51.0701", "mode": "fully"}, {"cip": "51.0799", "mode": "fully"}, {"cip": "51.1508", "mode": "fully"}, {"cip": "51.2201", "mode": "fully"}, {"cip": "51.3801", "mode": "fully"}], "short": "SNHU"}, {"unitid": "193900", "name": "New York University", "sector": "Private not-for-profit, 4-year or above", "rateAll": 87.6, "rateBach": 87.8, "fully": 1, "some": 2, "cips": [{"cip": "51.0204", "mode": "some"}, {"cip": "51.0701", "mode": "fully"}, {"cip": "51.0702", "mode": "some"}], "short": "NYU"}, {"unitid": "195809", "name": "St. John's University-New York", "sector": "Private not-for-profit, 4-year or above", "rateAll": 66.1, "rateBach": 66.1, "fully": 0, "some": 3, "cips": [{"cip": "51.0701", "mode": "some"}, {"cip": "51.0707", "mode": "some"}, {"cip": "51.2201", "mode": "some"}], "short": "St. John's"}, {"unitid": "199102", "name": "North Carolina A & T State University", "sector": "Public, 4-year or above", "rateAll": 57.2, "rateBach": 57.2, "fully": 1, "some": 0, "cips": [{"cip": "51.0912", "mode": "fully"}], "short": "NC A&T"}, {"unitid": "204796", "name": "Ohio State University-Main Campus", "sector": "Public, 4-year or above", "rateAll": 87.7, "rateBach": 87.7, "fully": 0, "some": 6, "cips": [{"cip": "51.0602", "mode": "some"}, {"cip": "51.0701", "mode": "some"}, {"cip": "51.1005", "mode": "some"}, {"cip": "51.2201", "mode": "some"}, {"cip": "51.3201", "mode": "some"}, {"cip": "51.3801", "mode": "some"}], "short": "Ohio State"}, {"unitid": "223232", "name": "Baylor University", "sector": "Private not-for-profit, 4-year or above", "rateAll": 80.0, "rateBach": 80.0, "fully": 1, "some": 1, "cips": [{"cip": "51.0201", "mode": "some"}, {"cip": "51.1199", "mode": "fully"}], "short": "Baylor"}, {"unitid": "230737", "name": "Utah Valley University", "sector": "Public, 4-year or above", "rateAll": 45.1, "rateBach": 46.8, "fully": 0, "some": 1, "cips": [{"cip": "51.3801", "mode": "some"}], "short": "Utah Valley"}, {"unitid": "236948", "name": "University of Washington-Seattle Campus", "sector": "Public, 4-year or above", "rateAll": 85.2, "rateBach": 85.2, "fully": 3, "some": 0, "cips": [{"cip": "51.1503", "mode": "fully"}, {"cip": "51.2003", "mode": "fully"}, {"cip": "51.9999", "mode": "fully"}], "short": "UW Seattle"}, {"unitid": "242972", "name": "NUC University", "sector": "Private for-profit, 4-year or above", "rateAll": 54.4, "rateBach": 26.6, "fully": 0, "some": 3, "cips": [{"cip": "51.3203", "mode": "some"}, {"cip": "51.3801", "mode": "some"}, {"cip": "51.3803", "mode": "some"}], "short": "NUC"}, {"unitid": "433387", "name": "Western Governors University", "sector": "Private not-for-profit, 4-year or above", "rateAll": 46.2, "rateBach": 46.2, "fully": 5, "some": 0, "cips": [{"cip": "51.0701", "mode": "fully"}, {"cip": "51.3203", "mode": "fully"}, {"cip": "51.3802", "mode": "fully"}, {"cip": "51.3805", "mode": "fully"}, {"cip": "51.3899", "mode": "fully"}], "short": "WGU"}, {"unitid": "449339", "name": "American Public University System", "sector": "Private for-profit, 4-year or above", "rateAll": 57.2, "rateBach": 50.3, "fully": 4, "some": 0, "cips": [{"cip": "51.0701", "mode": "fully"}, {"cip": "51.0706", "mode": "fully"}, {"cip": "51.2201", "mode": "fully"}, {"cip": "51.3801", "mode": "fully"}], "short": "APUS"}, {"unitid": "454227", "name": "Chamberlain University-Illinois", "sector": "Private for-profit, 4-year or above", "rateAll": 41.7, "rateBach": 41.7, "fully": 5, "some": 0, "cips": [{"cip": "51.2201", "mode": "fully"}, {"cip": "51.3801", "mode": "fully"}, {"cip": "51.3803", "mode": "fully"}, {"cip": "51.3805", "mode": "fully"}, {"cip": "51.3810", "mode": "fully"}], "short": "Chamberlain"}, {"unitid": "459736", "name": "Touro University California", "sector": "Private not-for-profit, 4-year or above", "rateAll": null, "rateBach": null, "fully": 1, "some": 2, "cips": [{"cip": "51.0000", "mode": "some"}, {"cip": "51.2201", "mode": "fully"}, {"cip": "51.3808", "mode": "some"}], "short": "Touro California"}, {"unitid": "484613", "name": "University of Phoenix-Arizona", "sector": "Private for-profit, 4-year or above", "rateAll": 20.8, "rateBach": 16.4, "fully": 7, "some": 0, "cips": [{"cip": "51.0701", "mode": "fully"}, {"cip": "51.1505", "mode": "fully"}, {"cip": "51.1508", "mode": "fully"}, {"cip": "51.2201", "mode": "fully"}, {"cip": "51.3203", "mode": "fully"}, {"cip": "51.3802", "mode": "fully"}, {"cip": "51.3805", "mode": "fully"}], "short": "Phoenix"}], "gql": {"engine": "graphlite 0.0.1", "full": false, "match": {"baseline": true, "bachelors": true, "any-online": true}}, "traps": {"quoted-code": {"label": "Write the CIP code as a number: 51 instead of '51'", "why": "The code is stored as text. DuckDB and Kuzu quietly convert 51 to '51' and still return the right schools. SPARQL compares RDF terms, so the integer 51 never matches the string \"51\": it returns nothing, with no error.", "texts": {"SQL": "-- Which schools offer a fully online master's in the health professions\n-- and graduate more than 60% of their students within six years?\n--\n-- SQL (DuckDB), run directly against the IPEDS CSVs.\nSELECT\n    i.UNITID                        AS unitid,\n    i.name                          AS institution,\n    o.gr4_rate_150_all_pct          AS grad_rate_6yr,\n    count(*)                        AS online_health_masters\nFROM programs      AS p\nJOIN institutions  AS i ON i.UNITID = p.UNITID\nJOIN outcomes      AS o ON o.UNITID = p.UNITID\nWHERE p.cip_2digit = 51                       -- Health Professions\n  AND p.awlevel_code = 7                        -- Master's degree\n  AND p.programs_offered_fully_distance > 0     -- offered fully online\n  AND o.gr4_rate_150_all_pct > 60               -- 150% of normal time = 6 years\nGROUP BY i.UNITID, i.name, o.gr4_rate_150_all_pct\nORDER BY grad_rate_6yr DESC;\n", "SPARQL": "# Which schools offer a fully online master's in the health professions\n# and graduate more than 60% of their students within six years?\n#\n# SPARQL (rdflib), against an RDF graph built from the same CSVs.\nPREFIX schema: <https://schema.org/>\nPREFIX kgn:    <https://knowledgegraphnavigator.com/vocab/ipeds#>\n\nSELECT ?unitid ?institution ?gradRate6yr (COUNT(?program) AS ?onlineHealthMasters)\nWHERE {\n  ?program a schema:EducationalOccupationalProgram ;\n           schema:provider          ?school ;\n           kgn:cipFamily            ?family ;\n           kgn:awardLevelCode       7 ;          # Master's degree\n           kgn:fullyDistancePrograms ?online .\n  ?family  kgn:cipCode              51 .       # Health Professions\n  ?school  schema:name              ?institution ;\n           kgn:unitid               ?unitid ;\n           kgn:gradRate150All       ?gradRate6yr .\n  FILTER (?online > 0 && ?gradRate6yr > 60)\n}\nGROUP BY ?unitid ?institution ?gradRate6yr\nORDER BY DESC(?gradRate6yr)\n", "Cypher": "// Which schools offer a fully online master's in the health professions\n// and graduate more than 60% of their students within six years?\n//\n// Cypher (Kuzu), against a labeled property graph built from the same CSVs.\nMATCH (i:Institution)-[:OFFERS]->(o:Offering)-[:IN_FAMILY]->(f:CipFamily {code: 51})\nWHERE o.awardLevelCode = 7\n  AND o.fullyDistance > 0\n  AND i.gradRate150All > 60\nRETURN i.unitid         AS unitid,\n       i.name           AS institution,\n       i.gradRate150All AS gradRate6yr,\n       count(o)         AS onlineHealthMasters\nORDER BY gradRate6yr DESC;\n", "GQL": "// Which schools offer a fully online master's in the health professions\n// and graduate more than 60% of their students within six years?\n//\n// ISO/IEC 39075:2024 GQL, against the same property graph schema as the\n// Cypher query. Executed with GraphLite (see run_gql.py and the README).\nMATCH (i:Institution)-[:OFFERS]->(o:Offering)-[:IN_FAMILY]->(f:CipFamily {code: 51})\nWHERE o.awardLevelCode = 7\n  AND o.fullyDistance > 0\n  AND i.gradRate150All > 60\nRETURN i.unitid         AS unitid,\n       i.name           AS institution,\n       i.gradRate150All AS gradRate6yr,\n       count(o)         AS onlineHealthMasters\nGROUP BY i.unitid, i.name, i.gradRate150All\nORDER BY gradRate6yr DESC;\n"}, "results": {"SQL": {"answer": ["123961", "193900", "236948", "223232", "132903", "135081"], "n": 6}, "SPARQL": {"answer": [], "n": 0}, "Cypher": {"answer": ["123961", "193900", "236948", "223232", "132903", "135081"], "n": 6}, "GQL": {"answer": [], "n": 0}}}, "proportion": {"label": "Write the threshold as a proportion: > 0.6 instead of > 60", "why": "IPEDS rates are stored as percents (0-100). Every school with a rate clears 0.6.", "texts": {"SQL": "-- Which schools offer a fully online master's in the health professions\n-- and graduate more than 60% of their students within six years?\n--\n-- SQL (DuckDB), run directly against the IPEDS CSVs.\nSELECT\n    i.UNITID                        AS unitid,\n    i.name                          AS institution,\n    o.gr4_rate_150_all_pct          AS grad_rate_6yr,\n    count(*)                        AS online_health_masters\nFROM programs      AS p\nJOIN institutions  AS i ON i.UNITID = p.UNITID\nJOIN outcomes      AS o ON o.UNITID = p.UNITID\nWHERE p.cip_2digit = '51'                       -- Health Professions\n  AND p.awlevel_code = 7                        -- Master's degree\n  AND p.programs_offered_fully_distance > 0     -- offered fully online\n  AND o.gr4_rate_150_all_pct > 0.6               -- 150% of normal time = 6 years\nGROUP BY i.UNITID, i.name, o.gr4_rate_150_all_pct\nORDER BY grad_rate_6yr DESC;\n", "SPARQL": "# Which schools offer a fully online master's in the health professions\n# and graduate more than 60% of their students within six years?\n#\n# SPARQL (rdflib), against an RDF graph built from the same CSVs.\nPREFIX schema: <https://schema.org/>\nPREFIX kgn:    <https://knowledgegraphnavigator.com/vocab/ipeds#>\n\nSELECT ?unitid ?institution ?gradRate6yr (COUNT(?program) AS ?onlineHealthMasters)\nWHERE {\n  ?program a schema:EducationalOccupationalProgram ;\n           schema:provider          ?school ;\n           kgn:cipFamily            ?family ;\n           kgn:awardLevelCode       7 ;          # Master's degree\n           kgn:fullyDistancePrograms ?online .\n  ?family  kgn:cipCode              \"51\" .       # Health Professions\n  ?school  schema:name              ?institution ;\n           kgn:unitid               ?unitid ;\n           kgn:gradRate150All       ?gradRate6yr .\n  FILTER (?online > 0 && ?gradRate6yr > 0.6)\n}\nGROUP BY ?unitid ?institution ?gradRate6yr\nORDER BY DESC(?gradRate6yr)\n", "Cypher": "// Which schools offer a fully online master's in the health professions\n// and graduate more than 60% of their students within six years?\n//\n// Cypher (Kuzu), against a labeled property graph built from the same CSVs.\nMATCH (i:Institution)-[:OFFERS]->(o:Offering)-[:IN_FAMILY]->(f:CipFamily {code: '51'})\nWHERE o.awardLevelCode = 7\n  AND o.fullyDistance > 0\n  AND i.gradRate150All > 0.6\nRETURN i.unitid         AS unitid,\n       i.name           AS institution,\n       i.gradRate150All AS gradRate6yr,\n       count(o)         AS onlineHealthMasters\nORDER BY gradRate6yr DESC;\n", "GQL": "// Which schools offer a fully online master's in the health professions\n// and graduate more than 60% of their students within six years?\n//\n// ISO/IEC 39075:2024 GQL, against the same property graph schema as the\n// Cypher query. Executed with GraphLite (see run_gql.py and the README).\nMATCH (i:Institution)-[:OFFERS]->(o:Offering)-[:IN_FAMILY]->(f:CipFamily {code: '51'})\nWHERE o.awardLevelCode = 7\n  AND o.fullyDistance > 0\n  AND i.gradRate150All > 0.6\nRETURN i.unitid         AS unitid,\n       i.name           AS institution,\n       i.gradRate150All AS gradRate6yr,\n       count(o)         AS onlineHealthMasters\nGROUP BY i.unitid, i.name, i.gradRate150All\nORDER BY gradRate6yr DESC;\n"}, "results": {"SQL": {"answer": ["123961", "193900", "236948", "223232", "132903", "135081", "199102", "449339", "110608", "433387", "183026", "454227", "484613"], "n": 13}, "SPARQL": {"answer": ["123961", "193900", "236948", "223232", "132903", "135081", "199102", "449339", "110608", "433387", "183026", "454227", "484613"], "n": 13}, "Cypher": {"answer": ["123961", "193900", "236948", "223232", "132903", "135081", "199102", "449339", "110608", "433387", "183026", "454227", "484613"], "n": 13}, "GQL": {"answer": ["123961", "193900", "236948", "223232", "132903", "135081", "199102", "449339", "110608", "433387", "183026", "454227", "484613"], "n": 13}}}, "optional-filter": {"label": "Put the rate condition inside an outer join or OPTIONAL block", "why": "A condition inside an outer join or OPTIONAL only decides whether the optional part attaches. Schools below 60% stay in the answer with a blank rate.", "texts": {"SQL": "-- Which schools offer a fully online master's in the health professions\n-- and graduate more than 60% of their students within six years?\n--\n-- SQL (DuckDB), run directly against the IPEDS CSVs.\nSELECT\n    i.UNITID                        AS unitid,\n    i.name                          AS institution,\n    o.gr4_rate_150_all_pct          AS grad_rate_6yr,\n    count(*)                        AS online_health_masters\nFROM programs      AS p\nJOIN institutions  AS i ON i.UNITID = p.UNITID\nLEFT JOIN outcomes AS o ON o.UNITID = p.UNITID AND o.gr4_rate_150_all_pct > 60\nWHERE p.cip_2digit = '51'                       -- Health Professions\n  AND p.awlevel_code = 7                        -- Master's degree\n  AND p.programs_offered_fully_distance > 0     -- offered fully online\nGROUP BY i.UNITID, i.name, o.gr4_rate_150_all_pct\nORDER BY grad_rate_6yr DESC;\n", "SPARQL": "# Which schools offer a fully online master's in the health professions\n# and graduate more than 60% of their students within six years?\n#\n# SPARQL (rdflib), against an RDF graph built from the same CSVs.\nPREFIX schema: <https://schema.org/>\nPREFIX kgn:    <https://knowledgegraphnavigator.com/vocab/ipeds#>\n\nSELECT ?unitid ?institution ?gradRate6yr (COUNT(?program) AS ?onlineHealthMasters)\nWHERE {\n  ?program a schema:EducationalOccupationalProgram ;\n           schema:provider          ?school ;\n           kgn:cipFamily            ?family ;\n           kgn:awardLevelCode       7 ;          # Master's degree\n           kgn:fullyDistancePrograms ?online .\n  ?family  kgn:cipCode              \"51\" .       # Health Professions\n  ?school  schema:name              ?institution ;\n           kgn:unitid               ?unitid .\n  OPTIONAL { ?school kgn:gradRate150All ?gradRate6yr . FILTER (?gradRate6yr > 60) }\n  FILTER (?online > 0)\n}\nGROUP BY ?unitid ?institution ?gradRate6yr\nORDER BY DESC(?gradRate6yr)\n", "Cypher": "// Which schools offer a fully online master's in the health professions\n// and graduate more than 60% of their students within six years?\n//\n// Cypher (Kuzu), against a labeled property graph built from the same CSVs.\nMATCH (i:Institution)-[:OFFERS]->(o:Offering)-[:IN_FAMILY]->(f:CipFamily {code: '51'})\nWHERE o.awardLevelCode = 7\n  AND o.fullyDistance > 0\n  AND i.gradRate150All > 60\nRETURN i.unitid         AS unitid,\n       i.name           AS institution,\n       i.gradRate150All AS gradRate6yr,\n       count(o)         AS onlineHealthMasters\nORDER BY gradRate6yr DESC;\n", "GQL": "// Which schools offer a fully online master's in the health professions\n// and graduate more than 60% of their students within six years?\n//\n// ISO/IEC 39075:2024 GQL, against the same property graph schema as the\n// Cypher query. Executed with GraphLite (see run_gql.py and the README).\nMATCH (i:Institution)-[:OFFERS]->(o:Offering)-[:IN_FAMILY]->(f:CipFamily {code: '51'})\nWHERE o.awardLevelCode = 7\n  AND o.fullyDistance > 0\n  AND i.gradRate150All > 60\nRETURN i.unitid         AS unitid,\n       i.name           AS institution,\n       i.gradRate150All AS gradRate6yr,\n       count(o)         AS onlineHealthMasters\nGROUP BY i.unitid, i.name, i.gradRate150All\nORDER BY gradRate6yr DESC;\n"}, "results": {"SQL": {"answer": ["123961", "193900", "236948", "223232", "132903", "135081", "110608", "183026", "199102", "433387", "449339", "454227", "459736", "484613"], "n": 14}, "SPARQL": {"answer": ["123961", "193900", "236948", "223232", "132903", "135081", "110608", "183026", "199102", "433387", "449339", "454227", "459736", "484613"], "n": 14}, "Cypher": {"na": "The rate is a property on the Institution node, so there is no optional match to misplace it in."}, "GQL": {"na": "The rate is a property on the Institution node, so there is no optional match to misplace it in."}}}, "negation": {"label": "Ask the opposite: which schools do NOT clear 60%?", "why": "Each query uses its language's usual negation. SQL and Cypher evaluate NOT (NULL > 60) as unknown and drop the school with no rate. SPARQL's NOT EXISTS asks whether a matching rate exists, finds none, and keeps it.", "texts": {"SQL": "-- Which schools offer a fully online master's in the health professions\n-- and graduate more than 60% of their students within six years?\n--\n-- SQL (DuckDB), run directly against the IPEDS CSVs.\nSELECT\n    i.UNITID                        AS unitid,\n    i.name                          AS institution,\n    o.gr4_rate_150_all_pct          AS grad_rate_6yr,\n    count(*)                        AS online_health_masters\nFROM programs      AS p\nJOIN institutions  AS i ON i.UNITID = p.UNITID\nJOIN outcomes      AS o ON o.UNITID = p.UNITID\nWHERE p.cip_2digit = '51'                       -- Health Professions\n  AND p.awlevel_code = 7                        -- Master's degree\n  AND p.programs_offered_fully_distance > 0     -- offered fully online\n  AND NOT (o.gr4_rate_150_all_pct > 60)               -- 150% of normal time = 6 years\nGROUP BY i.UNITID, i.name, o.gr4_rate_150_all_pct\nORDER BY grad_rate_6yr DESC;\n", "SPARQL": "# Which schools offer a fully online master's in the health professions\n# and graduate more than 60% of their students within six years?\n#\n# SPARQL (rdflib), against an RDF graph built from the same CSVs.\nPREFIX schema: <https://schema.org/>\nPREFIX kgn:    <https://knowledgegraphnavigator.com/vocab/ipeds#>\n\nSELECT ?unitid ?institution ?gradRate6yr (COUNT(?program) AS ?onlineHealthMasters)\nWHERE {\n  ?program a schema:EducationalOccupationalProgram ;\n           schema:provider          ?school ;\n           kgn:cipFamily            ?family ;\n           kgn:awardLevelCode       7 ;          # Master's degree\n           kgn:fullyDistancePrograms ?online .\n  ?family  kgn:cipCode              \"51\" .       # Health Professions\n  ?school  schema:name              ?institution ;\n           kgn:unitid               ?unitid .\n  OPTIONAL { ?school kgn:gradRate150All ?gradRate6yr }\n  FILTER NOT EXISTS { ?school kgn:gradRate150All ?r . FILTER (?r > 60) }\n  FILTER (?online > 0)\n}\nGROUP BY ?unitid ?institution ?gradRate6yr\nORDER BY DESC(?gradRate6yr)\n", "Cypher": "// Which schools offer a fully online master's in the health professions\n// and graduate more than 60% of their students within six years?\n//\n// Cypher (Kuzu), against a labeled property graph built from the same CSVs.\nMATCH (i:Institution)-[:OFFERS]->(o:Offering)-[:IN_FAMILY]->(f:CipFamily {code: '51'})\nWHERE o.awardLevelCode = 7\n  AND o.fullyDistance > 0\n  AND NOT (i.gradRate150All > 60)\nRETURN i.unitid         AS unitid,\n       i.name           AS institution,\n       i.gradRate150All AS gradRate6yr,\n       count(o)         AS onlineHealthMasters\nORDER BY gradRate6yr DESC;\n", "GQL": "// Which schools offer a fully online master's in the health professions\n// and graduate more than 60% of their students within six years?\n//\n// ISO/IEC 39075:2024 GQL, against the same property graph schema as the\n// Cypher query. Executed with GraphLite (see run_gql.py and the README).\nMATCH (i:Institution)-[:OFFERS]->(o:Offering)-[:IN_FAMILY]->(f:CipFamily {code: '51'})\nWHERE o.awardLevelCode = 7\n  AND o.fullyDistance > 0\n  AND NOT (i.gradRate150All > 60)\nRETURN i.unitid         AS unitid,\n       i.name           AS institution,\n       i.gradRate150All AS gradRate6yr,\n       count(o)         AS onlineHealthMasters\nGROUP BY i.unitid, i.name, i.gradRate150All\nORDER BY gradRate6yr DESC;\n"}, "results": {"SQL": {"answer": ["199102", "449339", "110608", "433387", "183026", "454227", "484613"], "n": 7}, "SPARQL": {"answer": ["199102", "449339", "110608", "433387", "183026", "454227", "484613", "459736"], "n": 8}, "Cypher": {"answer": ["199102", "449339", "110608", "433387", "183026", "454227", "484613"], "n": 7}, "GQL": {"error": "Error: Execution error: RuntimeError(\"NOT operator requires boolean operand\")"}}}}};
+const LANGS = ["SQL", "SPARQL", "Cypher", "GQL"];
+const ENGINE = {SQL: "DuckDB", SPARQL: "rdflib", Cypher: "Kùzu"};
+const VLABEL = {"baseline": "Strict: fully online, all students", "bachelors": "Bachelor's graduation rate", "any-online": "Partly online counts"};
+const TLABEL = {"quoted-code": "51 instead of '51'", "proportion": "> 0.6 instead of > 60",
+  "optional-filter": "Filter inside OPTIONAL / LEFT JOIN", "negation": "Ask the opposite (NOT)"};
+let variant = "baseline", lang = "SQL", trap = null;
+const NS = "http://www.w3.org/2000/svg";
+
+const vEl = document.getElementById("variants");
+Object.keys(DATA.variants).forEach(v => {
+  const b = document.createElement("button");
+  b.textContent = VLABEL[v] || v; b.dataset.v = v;
+  b.onclick = () => { variant = v; trap = null; render(); };
+  vEl.appendChild(b);
+});
+const trEl = document.getElementById("traps");
+Object.keys(DATA.traps).forEach(t => {
+  const b = document.createElement("button");
+  b.textContent = TLABEL[t] || t; b.dataset.t = t;
+  b.onclick = () => { trap = t; variant = "baseline"; render(); };
+  trEl.appendChild(b);
+});
+const tEl = document.getElementById("tabs");
+LANGS.forEach(l => {
+  const b = document.createElement("button");
+  b.textContent = l; b.setAttribute("role", "tab"); b.dataset.l = l;
+  b.onclick = () => { lang = l; render(); };
+  tEl.appendChild(b);
+});
+
+function rateOf(c) { return variant === "bachelors" && !trap ? c.rateBach : c.rateAll; }
+function resultText(r) {
+  if (r.answer) return `${r.n} school${r.n === 1 ? "" : "s"}`;
+  if (r.error) return "error";
+  return "n/a";
+}
+function reason(c, inAns) {
+  const r = rateOf(c);
+  const online = variant === "any-online" ? (c.fully + c.some) > 0 : c.fully > 0;
+  if (inAns) return "Meets both conditions";
+  const why = [];
+  if (!online) why.push("only partly online");
+  if (r === null) why.push("no graduation rate (graduate-only school)");
+  else if (r <= 60) why.push(`rate ${r}% is not above 60%`);
+  return why.join("; ");
+}
+
+function render() {
+  const base = DATA.variants.baseline;
+  [...vEl.children].forEach(b => b.setAttribute("aria-pressed", !trap && b.dataset.v === variant));
+  [...trEl.children].forEach(b => b.setAttribute("aria-pressed", b.dataset.t === trap));
+  [...tEl.children].forEach(b => b.setAttribute("aria-selected", b.dataset.l === lang));
+  const st = document.getElementById("status"), note = document.getElementById("whynote");
+  let text, answer, changedFrom = trap || variant !== "baseline";
+
+  if (trap) {
+    const T = DATA.traps[trap], R = T.results;
+    text = T.texts[lang];
+    const counts = LANGS.map(l => `${l} ${resultText(R[l])}`);
+    const distinct = new Set(LANGS.filter(l => R[l].answer).map(l => R[l].answer.join(",")));
+    document.getElementById("summary").textContent =
+      `${/[?.]$/.test(T.label) ? T.label : T.label + "."} Baseline: ${base.answer.length} schools. Now: ${counts.join(" · ")}` +
+      (distinct.size > 1 ? ". The languages disagree." : ".");
+    note.hidden = false; note.textContent = T.why;
+    const r = R[lang];
+    const engine = lang === "GQL" ? "GraphLite" : ENGINE[lang];
+    if (r.answer) {
+      st.innerHTML = `<span class="badge ${r.n === base.answer.length && r.answer.join() === base.answer.join() ? "ok" : "warn"}">Executed in ${engine}</span><span>${r.n} rows (baseline ${base.answer.length})</span>`;
+      answer = r.answer;
+    } else {
+      st.innerHTML = `<span class="badge warn">${r.error ? "Error in " + engine : "Not applicable"}</span><span></span>`;
+      st.lastChild.textContent = r.error || r.na;
+      answer = [];
+    }
+    document.getElementById("graphTitle").textContent = `${lang}'s answer, as a graph`;
+  } else {
+    const V = DATA.variants[variant];
+    text = V.texts[lang]; answer = V.answer; note.hidden = true;
+    document.getElementById("summary").textContent =
+      `${V.answer.length} schools. ${DATA.gql && DATA.gql.match[variant] ? "SQL, SPARQL, Cypher and GQL" : "SQL, SPARQL and Cypher"} ${V.agree ? "return the identical list" : "disagree"} under this definition.`;
+    if (lang === "GQL" && !DATA.gql) {
+      st.innerHTML = '<span class="badge warn">Written, not executed</span><span>Run run_gql.py with GraphLite installed to execute it.</span>';
+    } else if (lang === "GQL") {
+      const ok = DATA.gql.match[variant];
+      st.innerHTML = `<span class="badge ${ok ? "ok" : "warn"}">Executed in GraphLite</span><span>${V.answer.length} rows, ${ok ? "same as the other languages" : "different from the other languages"}</span>`;
+    } else {
+      st.innerHTML = `<span class="badge ok">Executed in ${ENGINE[lang]}</span><span>${V.answer.length} rows, same as the other languages</span>`;
+    }
+    document.getElementById("graphTitle").textContent = "The answer, as a graph";
+  }
+
+  const baseLines = new Set(base.texts[lang].split("\n"));
+  const pre = document.getElementById("code"); pre.innerHTML = "";
+  text.split("\n").forEach(line => {
+    const s = document.createElement("span");
+    s.className = "ln" + (changedFrom && !baseLines.has(line) ? " changed" : "");
+    s.textContent = line || " ";
+    pre.appendChild(s);
+  });
+
+  const ans = new Set(answer);
+  drawGraph(ans);
+  const tb = document.getElementById("rows"); tb.innerHTML = "";
+  const sorted = DATA.candidates.slice().sort((a, b) => (rateOf(b) ?? -1) - (rateOf(a) ?? -1));
+  sorted.forEach(c => {
+    const inAns = ans.has(c.unitid);
+    const tr = document.createElement("tr"); if (inAns) tr.className = "in";
+    const r = rateOf(c);
+    const why = trap ? (inAns ? `Returned by ${lang}` : `Not returned by ${lang}`) : reason(c, inAns);
+    const cells = [c.name, r === null ? "n/a" : r + "%",
+      `${c.fully} fully` + (c.some ? `, ${c.some} partly` : ""), why];
+    cells.forEach((t, i) => { const td = document.createElement("td"); td.textContent = t;
+      if (i === 1) td.className = "num"; if (i === 3) td.className = "why"; tr.appendChild(td); });
+    tb.appendChild(tr);
+  });
+}
+
+function el(tag, attrs, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+
+function drawGraph(answer) {
+  const W = 900, H = 760, cx = W / 2, cy = H / 2, R0 = 78, R1 = 300;
+  const box = document.getElementById("graph"); box.innerHTML = "";
+  const svg = el("svg", {viewBox: `0 0 ${W} ${H}`, role: "img",
+    "aria-label": `Graph of ${DATA.candidates.length} schools around the health professions master's node; ${answer.size} are in the answer.`}, box);
+  const rad = r => r === null ? R1 + 40 : R0 + (100 - r) / 80 * (R1 - R0);
+  const ring = rad(60);
+  el("circle", {cx, cy, r: ring, fill: "none", stroke: "var(--ring)", "stroke-dasharray": "5 5", "stroke-width": 1.5}, svg);
+
+  // Interleave high and low rates around the circle so neighbors sit at
+  // clearly different distances from the hub and their labels don't collide.
+  const byRate = DATA.candidates.slice().sort((a, b) => (rateOf(b) ?? -1) - (rateOf(a) ?? -1) || a.name.localeCompare(b.name));
+  const list = [];
+  for (let i = 0, j = byRate.length - 1; i <= j; i++, j--) { list.push(byRate[i]); if (i !== j) list.push(byRate[j]); }
+  list.forEach((c, i) => {
+    const a = -Math.PI / 2 + i / list.length * Math.PI * 2;
+    const r = rad(rateOf(c));
+    c._x = cx + Math.cos(a) * r; c._y = cy + Math.sin(a) * r; c._a = a;
+  });
+  // Fit the view to what is drawn.
+  const ys = list.map(c => c._y).concat([cy - ring, cy + ring]);
+  const top = Math.min(...ys) - 28, bottom = Math.max(...ys) + 28;
+  svg.setAttribute("viewBox", `0 ${top} ${W} ${bottom - top}`);
+  list.forEach(c => {
+    const inAns = answer.has(c.unitid);
+    const fullyOnly = c.fully > 0;
+    el("line", {x1: cx, y1: cy, x2: c._x, y2: c._y, stroke: inAns ? "var(--match)" : "var(--edge)",
+      "stroke-width": Math.min(1 + (c.fully + c.some) * 0.6, 5), "stroke-dasharray": fullyOnly ? "" : "4 4",
+      opacity: inAns ? 0.9 : 0.8}, svg);
+  });
+  const hub = el("circle", {cx, cy, r: 44, fill: "var(--hub)"}, svg);
+  [["Health", 700, -8], ["professions", 700, 6], ["master's", 400, 20]].forEach(([t, w, dy]) => {
+    const e = el("text", {x: cx, y: cy + dy - 4, "text-anchor": "middle", fill: "#fff", "font-size": 12, "font-weight": w}, svg);
+    e.textContent = t;
+  });
+
+  list.forEach(c => {
+    const inAns = answer.has(c.unitid);
+    const g = el("g", {}, svg);
+    const t = el("title", {}, g); const r = rateOf(c);
+    t.textContent = `${c.name}\nSix-year rate: ${r === null ? "n/a" : r + "%"}\n${c.fully} fully online, ${c.some} partly online`;
+    el("circle", {cx: c._x, cy: c._y, r: inAns ? 9 : 7, fill: inAns ? "var(--match)" : "var(--miss)",
+      stroke: "var(--surface)", "stroke-width": 2}, g);
+    const right = Math.cos(c._a) >= 0;
+    const lbl = el("text", {x: c._x + (right ? 12 : -12), y: c._y + 4, "text-anchor": right ? "start" : "end",
+      class: "node-label" + (inAns ? "" : " miss"), "font-weight": inAns ? 700 : 400}, g);
+    lbl.textContent = `${c.short} ${r === null ? "(n/a)" : r + "%"}`;
+  });
+}
+render();
+</script>
+</body>
+</html>
