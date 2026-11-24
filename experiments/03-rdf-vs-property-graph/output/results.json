@@ -1,0 +1,321 @@
+{
+  "examples": [
+    {
+      "key": "104151|11.0701",
+      "unitid": "104151",
+      "cip": "11.0701",
+      "title": "Computer Science",
+      "level": 5,
+      "school": "Arizona State University Campus Immersion",
+      "rows": [
+        {
+          "level": 5,
+          "award_level": "Bachelor's degree",
+          "completions": 701
+        },
+        {
+          "level": 7,
+          "award_level": "Master's degree",
+          "completions": 842
+        },
+        {
+          "level": 17,
+          "award_level": "Doctor's degree - research/scholarship",
+          "completions": 18
+        }
+      ]
+    },
+    {
+      "key": "104151|42.0101",
+      "unitid": "104151",
+      "cip": "42.0101",
+      "title": "Psychology, General",
+      "level": 5,
+      "school": "Arizona State University Campus Immersion",
+      "rows": [
+        {
+          "level": 5,
+          "award_level": "Bachelor's degree",
+          "completions": 868
+        },
+        {
+          "level": 7,
+          "award_level": "Master's degree",
+          "completions": 40
+        }
+      ]
+    },
+    {
+      "key": "104151|52.0801",
+      "unitid": "104151",
+      "cip": "52.0801",
+      "title": "Finance, General",
+      "level": 5,
+      "school": "Arizona State University Campus Immersion",
+      "rows": [
+        {
+          "level": 5,
+          "award_level": "Bachelor's degree",
+          "completions": 427
+        }
+      ]
+    }
+  ],
+  "engine": {
+    "rdf": "pyoxigraph 0.5.13"
+  },
+  "truth": {
+    "q1": [
+      701
+    ],
+    "q2": {
+      "2": 32483,
+      "3": 59780,
+      "4": 67,
+      "5": 205364,
+      "6": 3062,
+      "7": 104924,
+      "8": 2271,
+      "17": 5298,
+      "18": 7237,
+      "19": 387,
+      "20": 5713,
+      "21": 25091
+    }
+  },
+  "pairs": {
+    "total": 4949,
+    "several_levels": 2130,
+    "rows_affected": 5215,
+    "rows": 8034
+  },
+  "models": {
+    "pg": {
+      "label": "Property graph: count on the edge",
+      "size": {
+        "nodes": 1110,
+        "edges": 8034
+      },
+      "q1": [
+        701
+      ],
+      "q2": {
+        "2": 32483,
+        "3": 59780,
+        "4": 67,
+        "5": 205364,
+        "6": 3062,
+        "7": 104924,
+        "8": 2271,
+        "17": 5298,
+        "18": 7237,
+        "19": 387,
+        "20": 5713,
+        "21": 25091
+      },
+      "q1_ok": true,
+      "q2_ok": true,
+      "examples": {
+        "104151|11.0701": [
+          701
+        ],
+        "104151|42.0101": [
+          868
+        ],
+        "104151|52.0801": [
+          427
+        ]
+      }
+    },
+    "nary": {
+      "label": "RDF: intermediate offering node",
+      "size": {
+        "triples": 43455,
+        "turtle_bytes": 1537280
+      },
+      "q1": [
+        701
+      ],
+      "q2": {
+        "2": 32483,
+        "3": 59780,
+        "4": 67,
+        "5": 205364,
+        "6": 3062,
+        "7": 104924,
+        "8": 2271,
+        "17": 5298,
+        "18": 7237,
+        "19": 387,
+        "20": 5713,
+        "21": 25091
+      },
+      "q1_ok": true,
+      "q2_ok": true,
+      "examples": {
+        "104151|11.0701": [
+          701
+        ],
+        "104151|42.0101": [
+          868
+        ],
+        "104151|52.0801": [
+          427
+        ]
+      }
+    },
+    "reification": {
+      "label": "RDF 1.1: standard reification",
+      "size": {
+        "triples": 56438,
+        "turtle_bytes": 1838461
+      },
+      "q1": [
+        701
+      ],
+      "q2": {
+        "2": 32483,
+        "3": 59780,
+        "4": 67,
+        "5": 205364,
+        "6": 3062,
+        "7": 104924,
+        "8": 2271,
+        "17": 5298,
+        "18": 7237,
+        "19": 387,
+        "20": 5713,
+        "21": 25091
+      },
+      "q1_ok": true,
+      "q2_ok": true,
+      "examples": {
+        "104151|11.0701": [
+          701
+        ],
+        "104151|42.0101": [
+          868
+        ],
+        "104151|52.0801": [
+          427
+        ]
+      }
+    },
+    "star": {
+      "label": "RDF 1.2: << >> annotation syntax",
+      "size": {
+        "triples": 32336,
+        "turtle_bytes": 1057535
+      },
+      "q1": [
+        701
+      ],
+      "q2": {
+        "2": 32483,
+        "3": 59780,
+        "4": 67,
+        "5": 205364,
+        "6": 3062,
+        "7": 104924,
+        "8": 2271,
+        "17": 5298,
+        "18": 7237,
+        "19": 387,
+        "20": 5713,
+        "21": 25091
+      },
+      "q1_ok": true,
+      "q2_ok": true,
+      "examples": {
+        "104151|11.0701": [
+          701
+        ],
+        "104151|42.0101": [
+          868
+        ],
+        "104151|52.0801": [
+          427
+        ]
+      }
+    },
+    "reifier": {
+      "label": "RDF 1.2: named reifier per row",
+      "size": {
+        "triples": 32336,
+        "turtle_bytes": 1103444
+      },
+      "q1": [
+        701
+      ],
+      "q2": {
+        "2": 32483,
+        "3": 59780,
+        "4": 67,
+        "5": 205364,
+        "6": 3062,
+        "7": 104924,
+        "8": 2271,
+        "17": 5298,
+        "18": 7237,
+        "19": 387,
+        "20": 5713,
+        "21": 25091
+      },
+      "q1_ok": true,
+      "q2_ok": true,
+      "examples": {
+        "104151|11.0701": [
+          701
+        ],
+        "104151|42.0101": [
+          868
+        ],
+        "104151|52.0801": [
+          427
+        ]
+      }
+    },
+    "reifier-pair": {
+      "label": "RDF 1.2: reifier named for the pair (slip)",
+      "size": {
+        "triples": 28898,
+        "turtle_bytes": 1085748
+      },
+      "q1": [
+        18,
+        701,
+        842
+      ],
+      "q2": {
+        "2": 61470,
+        "3": 136626,
+        "4": 144,
+        "5": 296747,
+        "6": 68527,
+        "7": 263920,
+        "8": 43314,
+        "17": 81129,
+        "18": 9017,
+        "19": 1792,
+        "20": 10557,
+        "21": 88486
+      },
+      "q1_ok": false,
+      "q2_ok": false,
+      "examples": {
+        "104151|11.0701": [
+          18,
+          701,
+          842
+        ],
+        "104151|42.0101": [
+          40,
+          868
+        ],
+        "104151|52.0801": [
+          427
+        ]
+      }
+    }
+  }
+}
