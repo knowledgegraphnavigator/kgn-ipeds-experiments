@@ -1,0 +1,15 @@
+# How many bachelor's degrees (award level 5) did Arizona State University
+# Campus Immersion confer in CIP 11.0701 (Computer Science) in 2023-24?
+# RDF-star / RDF 1.2: the count annotates the triple itself.
+# The same text runs in a 2021 RDF-star engine and an RDF 1.2 engine.
+PREFIX schema: <https://schema.org/>
+PREFIX kgn:    <https://knowledgegraphnavigator.com/vocab/ipeds#>
+PREFIX ipeds:  <https://knowledgegraphnavigator.com/id/ipeds/>
+PREFIX cip:    <https://knowledgegraphnavigator.com/id/ipeds/cip/>
+PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT ?completions WHERE {
+  << ipeds:104151 kgn:conferredIn cip:11.0701 >>
+      kgn:awardLevelCode 5 ;
+      kgn:completions    ?completions .
+}
