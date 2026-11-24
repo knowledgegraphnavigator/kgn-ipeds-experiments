@@ -1,0 +1,16 @@
+@prefix schema: <https://schema.org/> .
+@prefix kgn: <https://knowledgegraphnavigator.com/vocab/ipeds#> .
+@prefix ipeds: <https://knowledgegraphnavigator.com/id/ipeds/> .
+@prefix cip: <https://knowledgegraphnavigator.com/id/ipeds/cip/> .
+@prefix offering: <https://knowledgegraphnavigator.com/id/ipeds/offering/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+ipeds:104151 a schema:CollegeOrUniversity ; schema:name "Arizona State University Campus Immersion" .
+cip:11.0701 a kgn:Cip ; kgn:cipCode "11.0701" ; kgn:cipFamily "Computer and Information Sciences and Support Services" .
+
+ipeds:104151 kgn:conferredIn cip:11.0701 ~ offering:104151-11.0701-5
+    {| kgn:awardLevelCode 5 ; kgn:completions 701 |} .
+ipeds:104151 kgn:conferredIn cip:11.0701 ~ offering:104151-11.0701-7
+    {| kgn:awardLevelCode 7 ; kgn:completions 842 |} .
+ipeds:104151 kgn:conferredIn cip:11.0701 ~ offering:104151-11.0701-17
+    {| kgn:awardLevelCode 17 ; kgn:completions 18 |} .
