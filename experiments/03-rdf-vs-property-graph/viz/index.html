@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Where Does the Number Go?</title>
+<meta name="description" content="One IPEDS completions count written as a property graph edge, an intermediate node, standard reification, RDF-star and RDF 1.2 reifiers, with what each engine returns.">
+<style>
+:root {
+  --bg: #f7f7f5; --surface: #ffffff; --surface-2: #f0f0ec; --border: #deded8;
+  --text: #1d1d1b; --muted: #66665f; --accent: #2457c5;
+  --ok: #1f7a3d; --ok-bg: #e3f3e8; --bad: #b42318; --bad-bg: #fde7e4;
+  --node: #2457c5; --node-2: #c2572b; --lit: #6d6d66; --edge: #a8a8a0; --code: #2a2a27;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #141413; --surface: #1d1d1b; --surface-2: #262624; --border: #3a3a36;
+    --text: #ecece8; --muted: #a3a39b; --accent: #7aa2ff;
+    --ok: #7fd49a; --ok-bg: #1b3324; --bad: #ff8a7a; --bad-bg: #3d1c18;
+    --node: #7aa2ff; --node-2: #f08a5d; --lit: #b4b4ac; --edge: #5c5c56; --code: #e2e2dc;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #141413; --surface: #1d1d1b; --surface-2: #262624; --border: #3a3a36;
+  --text: #ecece8; --muted: #a3a39b; --accent: #7aa2ff;
+  --ok: #7fd49a; --ok-bg: #1b3324; --bad: #ff8a7a; --bad-bg: #3d1c18;
+  --node: #7aa2ff; --node-2: #f08a5d; --lit: #b4b4ac; --edge: #5c5c56; --code: #e2e2dc;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text);
+  font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+header, main, section, footer { max-width: 1500px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
+header { padding-top: 24px; }
+h1 { font-size: 26px; margin: 0 0 4px; letter-spacing: -0.01em; }
+.sub { color: var(--muted); margin: 0; max-width: 900px; }
+.question { margin: 14px 0 0; font-size: 17px; font-weight: 600; max-width: 960px; }
+.controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 16px 0 0; }
+.controls span { font-size: 13px; color: var(--muted); }
+.seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--surface); }
+.seg button { font: inherit; font-size: 13px; padding: 7px 12px; border: 0; background: transparent; color: var(--text); cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--border); }
+.seg button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+.summary { margin: 12px 0 0; max-width: 960px; }
+main { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; padding-top: 16px; padding-bottom: 8px; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; min-width: 0; display: flex; flex-direction: column; }
+.card.slip { border-color: var(--bad); }
+.card .head { padding: 12px 14px 8px; }
+.card h2 { font-size: 15px; margin: 0; }
+.card .engine { font-size: 12px; color: var(--muted); }
+.card .desc { margin: 6px 0 0; font-size: 13px; color: var(--muted); min-height: 3.2em; }
+.card svg { width: 100%; height: auto; display: block; }
+.answer { margin: 0 14px; padding: 8px 10px; border-radius: 8px; font-size: 13px; }
+.answer.ok { background: var(--ok-bg); color: var(--ok); }
+.answer.bad { background: var(--bad-bg); color: var(--bad); }
+.size { margin: 6px 14px 0; font-size: 12px; color: var(--muted); }
+details { margin: 8px 14px 0; font-size: 13px; }
+details:last-of-type { margin-bottom: 12px; }
+summary { cursor: pointer; color: var(--accent); }
+pre { margin: 6px 0 0; padding: 10px 12px; overflow: auto; background: var(--surface-2); border-radius: 8px;
+  font: 12px/1.55 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--code); white-space: pre; }
+.nlabel { font-size: 12px; fill: var(--text); paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
+.small { font-size: 11px; }
+.muted { fill: var(--muted); }
+.badtext { fill: var(--bad); }
+section.table { padding-top: 8px; padding-bottom: 8px; }
+.card.wide { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th, td { text-align: left; padding: 7px 14px; border-top: 1px solid var(--border); vertical-align: top; }
+thead th { border-top: 0; color: var(--muted); font-weight: 600; }
+td.num { font-variant-numeric: tabular-nums; }
+.yes { color: var(--ok); font-weight: 600; }
+.no { color: var(--bad); font-weight: 600; }
+footer { padding-top: 8px; padding-bottom: 32px; font-size: 13px; color: var(--muted); }
+footer a, .sub a { color: var(--accent); }
+@media (max-width: 1100px) { main { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 720px) {
+  header, main, section, footer { padding-left: 16px; padding-right: 16px; }
+  main { grid-template-columns: minmax(0, 1fr); }
+  h1 { font-size: 22px; }
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>Where Does the Number Go?</h1>
+  <p class="sub">One IPEDS fact belongs to a relationship, not to a node: how many awards a school conferred in one CIP code at one award level in 2023-24. Here it is written six ways, loaded into real engines and queried with the same question.</p>
+  <p class="question" id="question"></p>
+  <div class="controls">
+    <span>Relationship:</span>
+    <div class="seg" id="examples"></div>
+    <span>Or make a slip:</span>
+    <div class="seg"><button id="slip" aria-pressed="false">Name the RDF 1.2 reifier for the pair, not the row</button></div>
+  </div>
+  <p class="summary" id="summary"></p>
+</header>
+<main id="cards"></main>
+<section class="table">
+  <div class="card wide">
+    <table>
+      <thead><tr><th>Model</th><th>Engine</th><th>Size of the full graph</th><th>Arizona State bachelor's in CIP 11.0701</th><th>Completions, all 8,034 rows</th></tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+</section>
+<footer>
+  Data: NCES IPEDS 2024 collection, completions file C2024_A (awards July 2023 to June 2024), 45-institution sample.
+  Code and results: <a href="https://github.com/knowledgegraphnavigator/kgn-ipeds-experiments/tree/main/experiments/03-rdf-vs-property-graph">github.com/knowledgegraphnavigator/kgn-ipeds-experiments</a> ·
+  <a href="https://www.knowledgegraphnavigator.com/">KnowledgeGraphNavigator.com</a>
+</footer>
+<script>
+const DATA = {"examples": [{"key": "104151|11.0701", "unitid": "104151", "cip": "11.0701", "title": "Computer Science", "level": 5, "school": "Arizona State University Campus Immersion", "rows": [{"level": 5, "award_level": "Bachelor's degree", "completions": 701, "short": "Bachelor's"}, {"level": 7, "award_level": "Master's degree", "completions": 842, "short": "Master's"}, {"level": 17, "award_level": "Doctor's degree - research/scholarship", "completions": 18, "short": "Doctor's (research)"}]}, {"key": "104151|42.0101", "unitid": "104151", "cip": "42.0101", "title": "Psychology, General", "level": 5, "school": "Arizona State University Campus Immersion", "rows": [{"level": 5, "award_level": "Bachelor's degree", "completions": 868, "short": "Bachelor's"}, {"level": 7, "award_level": "Master's degree", "completions": 40, "short": "Master's"}]}, {"key": "104151|52.0801", "unitid": "104151", "cip": "52.0801", "title": "Finance, General", "level": 5, "school": "Arizona State University Campus Immersion", "rows": [{"level": 5, "award_level": "Bachelor's degree", "completions": 427, "short": "Bachelor's"}]}], "truth": {"q1": [701], "q2total": 451677}, "pairs": {"total": 4949, "several_levels": 2130, "rows_affected": 5215, "rows": 8034}, "cards": [{"key": "pg", "engine": "Kùzu 0.11.3 · Cypher", "ran": true, "size": {"nodes": 1110, "edges": 8034}, "answers": {"104151|11.0701": [701], "104151|42.0101": [868], "104151|52.0801": [427]}, "q1": [701], "q2total": 451677, "code": {"104151|11.0701": "MERGE (i:Institution {unitid: '104151', name: \"Arizona State University Campus Immersion\"})\nMERGE (c:Cip {code: '11.0701', family: \"Computer and Information Sciences and Support Services\"})\nCREATE (i)-[:CONFERRED {awardLevelCode: 5, completions: 701}]->(c)\nCREATE (i)-[:CONFERRED {awardLevelCode: 7, completions: 842}]->(c)\nCREATE (i)-[:CONFERRED {awardLevelCode: 17, completions: 18}]->(c);\n", "104151|42.0101": "MERGE (i:Institution {unitid: '104151', name: \"Arizona State University Campus Immersion\"})\nMERGE (c:Cip {code: '42.0101', family: \"Psychology\"})\nCREATE (i)-[:CONFERRED {awardLevelCode: 5, completions: 868}]->(c)\nCREATE (i)-[:CONFERRED {awardLevelCode: 7, completions: 40}]->(c);\n", "104151|52.0801": "MERGE (i:Institution {unitid: '104151', name: \"Arizona State University Campus Immersion\"})\nMERGE (c:Cip {code: '52.0801', family: \"Business, Management, Marketing, and Related Support Services\"})\nCREATE (i)-[:CONFERRED {awardLevelCode: 5, completions: 427}]->(c);\n"}, "query": {"104151|11.0701": "MATCH (i:Institution {unitid: '104151'})-[r:CONFERRED]->(c:Cip {code: '11.0701'})\nWHERE r.awardLevelCode = 5\nRETURN r.completions AS completions;\n", "104151|42.0101": "MATCH (i:Institution {unitid: '104151'})-[r:CONFERRED]->(c:Cip {code: '42.0101'})\nWHERE r.awardLevelCode = 5\nRETURN r.completions AS completions;\n", "104151|52.0801": "MATCH (i:Institution {unitid: '104151'})-[r:CONFERRED]->(c:Cip {code: '52.0801'})\nWHERE r.awardLevelCode = 5\nRETURN r.completions AS completions;\n"}}, {"key": "nary", "engine": "Oxigraph 0.5 · SPARQL", "ran": true, "size": {"triples": 43455, "turtle_bytes": 1537280}, "answers": {"104151|11.0701": [701], "104151|42.0101": [868], "104151|52.0801": [427]}, "q1": [701], "q2total": 451677, "code": {"104151|11.0701": "ipeds:104151 a schema:CollegeOrUniversity ; schema:name \"Arizona State University Campus Immersion\" .\ncip:11.0701 a kgn:Cip ; kgn:cipCode \"11.0701\" ; kgn:cipFamily \"Computer and Information Sciences and Support Services\" .\n\noffering:104151-11.0701-5 a schema:EducationalOccupationalProgram ;\n    schema:provider ipeds:104151 ;\n    kgn:cip cip:11.0701 ;\n    kgn:awardLevelCode 5 ; kgn:completions 701 .\noffering:104151-11.0701-7 a schema:EducationalOccupationalProgram ;\n    schema:provider ipeds:104151 ;\n    kgn:cip cip:11.0701 ;\n    kgn:awardLevelCode 7 ; kgn:completions 842 .\noffering:104151-11.0701-17 a schema:EducationalOccupationalProgram ;\n    schema:provider ipeds:104151 ;\n    kgn:cip cip:11.0701 ;\n    kgn:awardLevelCode 17 ; kgn:completions 18 .\n", "104151|42.0101": "ipeds:104151 a schema:CollegeOrUniversity ; schema:name \"Arizona State University Campus Immersion\" .\ncip:42.0101 a kgn:Cip ; kgn:cipCode \"42.0101\" ; kgn:cipFamily \"Psychology\" .\n\noffering:104151-42.0101-5 a schema:EducationalOccupationalProgram ;\n    schema:provider ipeds:104151 ;\n    kgn:cip cip:42.0101 ;\n    kgn:awardLevelCode 5 ; kgn:completions 868 .\noffering:104151-42.0101-7 a schema:EducationalOccupationalProgram ;\n    schema:provider ipeds:104151 ;\n    kgn:cip cip:42.0101 ;\n    kgn:awardLevelCode 7 ; kgn:completions 40 .\n", "104151|52.0801": "ipeds:104151 a schema:CollegeOrUniversity ; schema:name \"Arizona State University Campus Immersion\" .\ncip:52.0801 a kgn:Cip ; kgn:cipCode \"52.0801\" ; kgn:cipFamily \"Business, Management, Marketing, and Related Support Services\" .\n\noffering:104151-52.0801-5 a schema:EducationalOccupationalProgram ;\n    schema:provider ipeds:104151 ;\n    kgn:cip cip:52.0801 ;\n    kgn:awardLevelCode 5 ; kgn:completions 427 .\n"}, "query": {"104151|11.0701": "SELECT ?completions WHERE {\n  ?offering schema:provider     ipeds:104151 ;\n            kgn:cip             cip:11.0701 ;\n            kgn:awardLevelCode  5 ;\n            kgn:completions     ?completions .\n}\n", "104151|42.0101": "SELECT ?completions WHERE {\n  ?offering schema:provider     ipeds:104151 ;\n            kgn:cip             cip:42.0101 ;\n            kgn:awardLevelCode  5 ;\n            kgn:completions     ?completions .\n}\n", "104151|52.0801": "SELECT ?completions WHERE {\n  ?offering schema:provider     ipeds:104151 ;\n            kgn:cip             cip:52.0801 ;\n            kgn:awardLevelCode  5 ;\n            kgn:completions     ?completions .\n}\n"}}, {"key": "reification", "engine": "Oxigraph 0.5 · SPARQL", "ran": true, "size": {"triples": 56438, "turtle_bytes": 1838461}, "answers": {"104151|11.0701": [701], "104151|42.0101": [868], "104151|52.0801": [427]}, "q1": [701], "q2total": 451677, "code": {"104151|11.0701": "ipeds:104151 a schema:CollegeOrUniversity ; schema:name \"Arizona State University Campus Immersion\" .\ncip:11.0701 a kgn:Cip ; kgn:cipCode \"11.0701\" ; kgn:cipFamily \"Computer and Information Sciences and Support Services\" .\n\nipeds:104151 kgn:conferredIn cip:11.0701 .\noffering:104151-11.0701-5 a rdf:Statement ;\n    rdf:subject ipeds:104151 ;\n    rdf:predicate kgn:conferredIn ;\n    rdf:object cip:11.0701 ;\n    kgn:awardLevelCode 5 ; kgn:completions 701 .\noffering:104151-11.0701-7 a rdf:Statement ;\n    rdf:subject ipeds:104151 ;\n    rdf:predicate kgn:conferredIn ;\n    rdf:object cip:11.0701 ;\n    kgn:awardLevelCode 7 ; kgn:completions 842 .\noffering:104151-11.0701-17 a rdf:Statement ;\n    rdf:subject ipeds:104151 ;\n    rdf:predicate kgn:conferredIn ;\n    rdf:object cip:11.0701 ;\n    kgn:awardLevelCode 17 ; kgn:completions 18 .\n", "104151|42.0101": "ipeds:104151 a schema:CollegeOrUniversity ; schema:name \"Arizona State University Campus Immersion\" .\ncip:42.0101 a kgn:Cip ; kgn:cipCode \"42.0101\" ; kgn:cipFamily \"Psychology\" .\n\nipeds:104151 kgn:conferredIn cip:42.0101 .\noffering:104151-42.0101-5 a rdf:Statement ;\n    rdf:subject ipeds:104151 ;\n    rdf:predicate kgn:conferredIn ;\n    rdf:object cip:42.0101 ;\n    kgn:awardLevelCode 5 ; kgn:completions 868 .\noffering:104151-42.0101-7 a rdf:Statement ;\n    rdf:subject ipeds:104151 ;\n    rdf:predicate kgn:conferredIn ;\n    rdf:object cip:42.0101 ;\n    kgn:awardLevelCode 7 ; kgn:completions 40 .\n", "104151|52.0801": "ipeds:104151 a schema:CollegeOrUniversity ; schema:name \"Arizona State University Campus Immersion\" .\ncip:52.0801 a kgn:Cip ; kgn:cipCode \"52.0801\" ; kgn:cipFamily \"Business, Management, Marketing, and Related Support Services\" .\n\nipeds:104151 kgn:conferredIn cip:52.0801 .\noffering:104151-52.0801-5 a rdf:Statement ;\n    rdf:subject ipeds:104151 ;\n    rdf:predicate kgn:conferredIn ;\n    rdf:object cip:52.0801 ;\n    kgn:awardLevelCode 5 ; kgn:completions 427 .\n"}, "query": {"104151|11.0701": "SELECT ?completions WHERE {\n  ?statement rdf:subject        ipeds:104151 ;\n             rdf:predicate      kgn:conferredIn ;\n             rdf:object         cip:11.0701 ;\n             kgn:awardLevelCode 5 ;\n             kgn:completions    ?completions .\n}\n", "104151|42.0101": "SELECT ?completions WHERE {\n  ?statement rdf:subject        ipeds:104151 ;\n             rdf:predicate      kgn:conferredIn ;\n             rdf:object         cip:42.0101 ;\n             kgn:awardLevelCode 5 ;\n             kgn:completions    ?completions .\n}\n", "104151|52.0801": "SELECT ?completions WHERE {\n  ?statement rdf:subject        ipeds:104151 ;\n             rdf:predicate      kgn:conferredIn ;\n             rdf:object         cip:52.0801 ;\n             kgn:awardLevelCode 5 ;\n             kgn:completions    ?completions .\n}\n"}}, {"key": "reifier", "engine": "Oxigraph 0.5 · SPARQL 1.2", "ran": true, "size": {"triples": 32336, "turtle_bytes": 1103444}, "answers": {"104151|11.0701": [701], "104151|42.0101": [868], "104151|52.0801": [427]}, "q1": [701], "q2total": 451677, "code": {"104151|11.0701": "ipeds:104151 a schema:CollegeOrUniversity ; schema:name \"Arizona State University Campus Immersion\" .\ncip:11.0701 a kgn:Cip ; kgn:cipCode \"11.0701\" ; kgn:cipFamily \"Computer and Information Sciences and Support Services\" .\n\nipeds:104151 kgn:conferredIn cip:11.0701 ~ offering:104151-11.0701-5\n    {| kgn:awardLevelCode 5 ; kgn:completions 701 |} .\nipeds:104151 kgn:conferredIn cip:11.0701 ~ offering:104151-11.0701-7\n    {| kgn:awardLevelCode 7 ; kgn:completions 842 |} .\nipeds:104151 kgn:conferredIn cip:11.0701 ~ offering:104151-11.0701-17\n    {| kgn:awardLevelCode 17 ; kgn:completions 18 |} .\n", "104151|42.0101": "ipeds:104151 a schema:CollegeOrUniversity ; schema:name \"Arizona State University Campus Immersion\" .\ncip:42.0101 a kgn:Cip ; kgn:cipCode \"42.0101\" ; kgn:cipFamily \"Psychology\" .\n\nipeds:104151 kgn:conferredIn cip:42.0101 ~ offering:104151-42.0101-5\n    {| kgn:awardLevelCode 5 ; kgn:completions 868 |} .\nipeds:104151 kgn:conferredIn cip:42.0101 ~ offering:104151-42.0101-7\n    {| kgn:awardLevelCode 7 ; kgn:completions 40 |} .\n", "104151|52.0801": "ipeds:104151 a schema:CollegeOrUniversity ; schema:name \"Arizona State University Campus Immersion\" .\ncip:52.0801 a kgn:Cip ; kgn:cipCode \"52.0801\" ; kgn:cipFamily \"Business, Management, Marketing, and Related Support Services\" .\n\nipeds:104151 kgn:conferredIn cip:52.0801 ~ offering:104151-52.0801-5\n    {| kgn:awardLevelCode 5 ; kgn:completions 427 |} .\n"}, "query": {"104151|11.0701": "SELECT ?completions WHERE {\n  ipeds:104151 kgn:conferredIn cip:11.0701 ~ ?offering\n      {| kgn:awardLevelCode 5 ; kgn:completions ?completions |} .\n}\n", "104151|42.0101": "SELECT ?completions WHERE {\n  ipeds:104151 kgn:conferredIn cip:42.0101 ~ ?offering\n      {| kgn:awardLevelCode 5 ; kgn:completions ?completions |} .\n}\n", "104151|52.0801": "SELECT ?completions WHERE {\n  ipeds:104151 kgn:conferredIn cip:52.0801 ~ ?offering\n      {| kgn:awardLevelCode 5 ; kgn:completions ?completions |} .\n}\n"}}, {"key": "star", "engine": "Oxigraph 0.5 · SPARQL 1.2", "ran": true, "size": {"triples": 32336, "turtle_bytes": 1057535}, "answers": {"104151|11.0701": [701], "104151|42.0101": [868], "104151|52.0801": [427]}, "q1": [701], "q2total": 451677, "code": {"104151|11.0701": "ipeds:104151 a schema:CollegeOrUniversity ; schema:name \"Arizona State University Campus Immersion\" .\ncip:11.0701 a kgn:Cip ; kgn:cipCode \"11.0701\" ; kgn:cipFamily \"Computer and Information Sciences and Support Services\" .\n\nipeds:104151 kgn:conferredIn cip:11.0701 .\n<< ipeds:104151 kgn:conferredIn cip:11.0701 >> kgn:awardLevelCode 5 ; kgn:completions 701 .\n<< ipeds:104151 kgn:conferredIn cip:11.0701 >> kgn:awardLevelCode 7 ; kgn:completions 842 .\n<< ipeds:104151 kgn:conferredIn cip:11.0701 >> kgn:awardLevelCode 17 ; kgn:completions 18 .\n", "104151|42.0101": "ipeds:104151 a schema:CollegeOrUniversity ; schema:name \"Arizona State University Campus Immersion\" .\ncip:42.0101 a kgn:Cip ; kgn:cipCode \"42.0101\" ; kgn:cipFamily \"Psychology\" .\n\nipeds:104151 kgn:conferredIn cip:42.0101 .\n<< ipeds:104151 kgn:conferredIn cip:42.0101 >> kgn:awardLevelCode 5 ; kgn:completions 868 .\n<< ipeds:104151 kgn:conferredIn cip:42.0101 >> kgn:awardLevelCode 7 ; kgn:completions 40 .\n", "104151|52.0801": "ipeds:104151 a schema:CollegeOrUniversity ; schema:name \"Arizona State University Campus Immersion\" .\ncip:52.0801 a kgn:Cip ; kgn:cipCode \"52.0801\" ; kgn:cipFamily \"Business, Management, Marketing, and Related Support Services\" .\n\nipeds:104151 kgn:conferredIn cip:52.0801 .\n<< ipeds:104151 kgn:conferredIn cip:52.0801 >> kgn:awardLevelCode 5 ; kgn:completions 427 .\n"}, "query": {"104151|11.0701": "SELECT ?completions WHERE {\n  << ipeds:104151 kgn:conferredIn cip:11.0701 >>\n      kgn:awardLevelCode 5 ;\n      kgn:completions    ?completions .\n}\n", "104151|42.0101": "SELECT ?completions WHERE {\n  << ipeds:104151 kgn:conferredIn cip:42.0101 >>\n      kgn:awardLevelCode 5 ;\n      kgn:completions    ?completions .\n}\n", "104151|52.0801": "SELECT ?completions WHERE {\n  << ipeds:104151 kgn:conferredIn cip:52.0801 >>\n      kgn:awardLevelCode 5 ;\n      kgn:completions    ?completions .\n}\n"}}, {"key": "star-2021", "engine": "Oxigraph 0.3.22 · SPARQL-star", "ran": true, "size": {"triples": 23949, "turtle_bytes": 1057535}, "answers": {"104151|11.0701": [18, 701, 842], "104151|42.0101": [40, 868], "104151|52.0801": [427]}, "q1": [18, 701, 842], "q2total": 1061729, "code": {"104151|11.0701": "ipeds:104151 a schema:CollegeOrUniversity ; schema:name \"Arizona State University Campus Immersion\" .\ncip:11.0701 a kgn:Cip ; kgn:cipCode \"11.0701\" ; kgn:cipFamily \"Computer and Information Sciences and Support Services\" .\n\nipeds:104151 kgn:conferredIn cip:11.0701 .\n<< ipeds:104151 kgn:conferredIn cip:11.0701 >> kgn:awardLevelCode 5 ; kgn:completions 701 .\n<< ipeds:104151 kgn:conferredIn cip:11.0701 >> kgn:awardLevelCode 7 ; kgn:completions 842 .\n<< ipeds:104151 kgn:conferredIn cip:11.0701 >> kgn:awardLevelCode 17 ; kgn:completions 18 .\n", "104151|42.0101": "ipeds:104151 a schema:CollegeOrUniversity ; schema:name \"Arizona State University Campus Immersion\" .\ncip:42.0101 a kgn:Cip ; kgn:cipCode \"42.0101\" ; kgn:cipFamily \"Psychology\" .\n\nipeds:104151 kgn:conferredIn cip:42.0101 .\n<< ipeds:104151 kgn:conferredIn cip:42.0101 >> kgn:awardLevelCode 5 ; kgn:completions 868 .\n<< ipeds:104151 kgn:conferredIn cip:42.0101 >> kgn:awardLevelCode 7 ; kgn:completions 40 .\n", "104151|52.0801": "ipeds:104151 a schema:CollegeOrUniversity ; schema:name \"Arizona State University Campus Immersion\" .\ncip:52.0801 a kgn:Cip ; kgn:cipCode \"52.0801\" ; kgn:cipFamily \"Business, Management, Marketing, and Related Support Services\" .\n\nipeds:104151 kgn:conferredIn cip:52.0801 .\n<< ipeds:104151 kgn:conferredIn cip:52.0801 >> kgn:awardLevelCode 5 ; kgn:completions 427 .\n"}, "query": {"104151|11.0701": "SELECT ?completions WHERE {\n  << ipeds:104151 kgn:conferredIn cip:11.0701 >>\n      kgn:awardLevelCode 5 ;\n      kgn:completions    ?completions .\n}\n", "104151|42.0101": "SELECT ?completions WHERE {\n  << ipeds:104151 kgn:conferredIn cip:42.0101 >>\n      kgn:awardLevelCode 5 ;\n      kgn:completions    ?completions .\n}\n", "104151|52.0801": "SELECT ?completions WHERE {\n  << ipeds:104151 kgn:conferredIn cip:52.0801 >>\n      kgn:awardLevelCode 5 ;\n      kgn:completions    ?completions .\n}\n"}}, {"key": "reifier-pair", "engine": "Oxigraph 0.5 · SPARQL 1.2", "ran": true, "size": {"triples": 28898, "turtle_bytes": 1085748}, "answers": {"104151|11.0701": [18, 701, 842], "104151|42.0101": [40, 868], "104151|52.0801": [427]}, "q1": [18, 701, 842], "q2total": 1061729, "code": {"104151|11.0701": "ipeds:104151 a schema:CollegeOrUniversity ; schema:name \"Arizona State University Campus Immersion\" .\ncip:11.0701 a kgn:Cip ; kgn:cipCode \"11.0701\" ; kgn:cipFamily \"Computer and Information Sciences and Support Services\" .\n\nipeds:104151 kgn:conferredIn cip:11.0701 ~ offering:104151-11.0701\n    {| kgn:awardLevelCode 5 ; kgn:completions 701 |} .\nipeds:104151 kgn:conferredIn cip:11.0701 ~ offering:104151-11.0701\n    {| kgn:awardLevelCode 7 ; kgn:completions 842 |} .\nipeds:104151 kgn:conferredIn cip:11.0701 ~ offering:104151-11.0701\n    {| kgn:awardLevelCode 17 ; kgn:completions 18 |} .\n", "104151|42.0101": "ipeds:104151 a schema:CollegeOrUniversity ; schema:name \"Arizona State University Campus Immersion\" .\ncip:42.0101 a kgn:Cip ; kgn:cipCode \"42.0101\" ; kgn:cipFamily \"Psychology\" .\n\nipeds:104151 kgn:conferredIn cip:42.0101 ~ offering:104151-42.0101\n    {| kgn:awardLevelCode 5 ; kgn:completions 868 |} .\nipeds:104151 kgn:conferredIn cip:42.0101 ~ offering:104151-42.0101\n    {| kgn:awardLevelCode 7 ; kgn:completions 40 |} .\n", "104151|52.0801": "ipeds:104151 a schema:CollegeOrUniversity ; schema:name \"Arizona State University Campus Immersion\" .\ncip:52.0801 a kgn:Cip ; kgn:cipCode \"52.0801\" ; kgn:cipFamily \"Business, Management, Marketing, and Related Support Services\" .\n\nipeds:104151 kgn:conferredIn cip:52.0801 ~ offering:104151-52.0801\n    {| kgn:awardLevelCode 5 ; kgn:completions 427 |} .\n"}, "query": {"104151|11.0701": "SELECT ?completions WHERE {\n  ipeds:104151 kgn:conferredIn cip:11.0701 ~ ?offering\n      {| kgn:awardLevelCode 5 ; kgn:completions ?completions |} .\n}\n", "104151|42.0101": "SELECT ?completions WHERE {\n  ipeds:104151 kgn:conferredIn cip:42.0101 ~ ?offering\n      {| kgn:awardLevelCode 5 ; kgn:completions ?completions |} .\n}\n", "104151|52.0801": "SELECT ?completions WHERE {\n  ipeds:104151 kgn:conferredIn cip:52.0801 ~ ?offering\n      {| kgn:awardLevelCode 5 ; kgn:completions ?completions |} .\n}\n"}}], "example_pairs_2021": [[5, 18], [5, 701], [5, 842], [7, 18], [7, 701], [7, 842], [17, 18], [17, 701], [17, 842]]};
+const TEXT = {
+  "pg": ["Property graph", "The count is a property on the edge. Each award level is its own edge between the same two nodes."],
+  "nary": ["RDF: intermediate node", "Each row becomes an offering node that points to the school and to the CIP code. There is no direct school-to-CIP triple."],
+  "reification": ["RDF 1.1: standard reification", "The triple is stated once. Each row becomes an rdf:Statement that repeats the triple's subject, predicate and object."],
+  "reifier": ["RDF 1.2: named reifier", "The triple is stated once. Each row gets its own reifier, named for the row, which points at the triple."],
+  "star": ["<< >> read by an RDF 1.2 engine", "The same Turtle as the next card. RDF 1.2 reads each << >> as a new, unnamed reifier, so the rows stay apart."],
+  "star-2021": ["<< >> read by a 2021 RDF-star engine", "The 2021 RDF-star report reads << >> as the triple itself. Every row annotates the same term, so levels and counts come apart."],
+  "reifier-pair": ["Slip: reifier named for the pair", "Same as the named reifier, but the reifier is named for the school and CIP code. Every row lands on it."],
+};
+const NS = "http://www.w3.org/2000/svg";
+let cur = 0, slip = false;
+
+function el(tag, attrs, parent, text) {
+  const e = document.createElementNS(NS, tag);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+  if (text != null) e.textContent = text;
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function line(svg, x1, y1, x2, y2, opts = {}) {
+  return el("line", { x1, y1, x2, y2, stroke: opts.color || "var(--edge)", "stroke-width": opts.w || 1.6,
+    "stroke-dasharray": opts.dash ? "4 4" : "none", "marker-end": opts.arrow ? "url(#arrow)" : "none" }, svg);
+}
+function label(svg, x, y, lines, cls = "") {
+  const t = el("text", { x, y, "text-anchor": "middle", class: "nlabel " + cls }, svg);
+  lines.forEach((s, i) => el("tspan", { x, dy: i ? 14 : 0 }, t, s));
+  return t;
+}
+function circle(svg, x, y, r, color, hollow) {
+  return el("circle", { cx: x, cy: y, r, fill: hollow ? "var(--surface)" : color, stroke: color, "stroke-width": 2 }, svg);
+}
+function spread(k, a, b) { return k === 1 ? [(a + b) / 2] : Array.from({ length: k }, (_, i) => a + i * (b - a) / (k - 1)); }
+
+function draw(kind, ex) {
+  const W = 420, H = 250, svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img",
+    "aria-label": TEXT[kind][0] + " for " + ex.school + " and CIP " + ex.cip });
+  const defs = el("defs", {}, svg);
+  const m = el("marker", { id: "arrow", viewBox: "0 0 10 10", refX: 9, refY: 5, markerWidth: 6, markerHeight: 6, orient: "auto-start-reverse" }, defs);
+  el("path", { d: "M0,0 L10,5 L0,10 z", fill: "var(--edge)" }, m);
+  const S = [42, 200], C = [378, 200], rows = ex.rows, k = rows.length;
+  const tag = r => [r.short, r.completions.toLocaleString()];
+  const edgeLabel = (x, y, s) => label(svg, x, y, [s], "small muted");
+  const bad = kind === "star-2021" || kind === "reifier-pair";
+  if (kind === "pg") {
+    const mids = k === 1 ? [200] : spread(k, 70, 175);
+    mids.forEach((my, i) => {
+      const cy = 2 * my - 200;
+      el("path", { d: `M${S[0]},${S[1]} Q${W / 2},${cy} ${C[0] - 16},${C[1]}`, fill: "none", stroke: "var(--edge)", "stroke-width": 1.6, "marker-end": "url(#arrow)" }, svg);
+      label(svg, W / 2, my - 4, [`${tag(rows[i])[0]} · ${tag(rows[i])[1]}`], "small");
+    });
+    edgeLabel(W / 2, 228, k > 1 ? `${k} CONFERRED edges` : "CONFERRED edge");
+  } else if (kind === "nary") {
+    const xs = k === 1 ? [W / 2] : spread(k, 85, 335);
+    xs.forEach(x => {
+      line(svg, x, 80, S[0] + 10, S[1] - 12, { arrow: true });
+      line(svg, x, 80, C[0] - 10, C[1] - 12, { arrow: true });
+    });
+    xs.forEach((x, i) => {
+      circle(svg, x, 80, 9, "var(--node-2)");
+      label(svg, x, 42, tag(rows[i]), "small");
+      label(svg, x, 106, ["offering"], "small muted");
+    });
+    edgeLabel(W / 2, 170, "schema:provider · kgn:cip");
+  } else {
+    line(svg, S[0] + 16, S[1], C[0] - 16, C[1], { arrow: true });
+    edgeLabel(W / 2, 218, "kgn:conferredIn");
+    const mid = [W / 2, 200];
+    if (!bad) {
+      const xs = k === 1 ? [W / 2] : spread(k, 85, 335);
+      xs.forEach((x, i) => {
+        if (kind === "reification") {
+          line(svg, x, 80, S[0] + 10, S[1] - 12, { dash: true }); line(svg, x, 80, C[0] - 10, C[1] - 12, { dash: true });
+        } else {
+          line(svg, x, 80, mid[0], mid[1] - 6, { dash: true, arrow: true });
+        }
+      });
+      xs.forEach((x, i) => {
+        circle(svg, x, 80, 9, "var(--node-2)", kind === "star");
+        label(svg, x, 42, tag(rows[i]), "small");
+        const name = kind === "star" ? `_:b${i + 1}` : kind === "reification" ? "rdf:Statement" : `offering:…-${rows[i].level}`;
+        label(svg, x, 106, [name], "small muted");
+      });
+      edgeLabel(W / 2, kind === "reification" ? 170 : 150, kind === "reification" ? "rdf:subject · rdf:object" : "rdf:reifies");
+    } else {
+      const B = [W / 2, 112];
+      line(svg, B[0], B[1] + 21, mid[0], mid[1] - 6, { dash: true, arrow: true });
+      const ys = spread(k, 34, 34 + (k - 1) * 30);
+      ys.forEach((y, i) => {
+        line(svg, B[0] - 66, B[1], 134, y, { color: "var(--bad)", w: 1.2 });
+        line(svg, B[0] + 66, B[1], W - 134, y, { color: "var(--bad)", w: 1.2 });
+      });
+      ys.forEach((y, i) => {
+        label(svg, 128, y + 4, [rows[i].short], "small").setAttribute("text-anchor", "end");
+        label(svg, W - 128, y + 4, [rows[i].completions.toLocaleString()], "small").setAttribute("text-anchor", "start");
+      });
+      el("rect", { x: B[0] - 66, y: B[1] - 21, width: 132, height: 42, rx: 6, fill: "var(--bad-bg)", stroke: "var(--bad)", "stroke-width": 1.5 }, svg);
+      label(svg, B[0], B[1] - 3, kind === "star-2021" ? ["<< ASU conferredIn", `CIP ${ex.cip} >>`] : ["offering:", `${ex.unitid}-${ex.cip}`], "small badtext");
+      edgeLabel(W / 2, 154, kind === "star-2021" ? "one quoted triple" : "one reifier");
+      label(svg, 128, 14, ["award level"], "small muted").setAttribute("text-anchor", "end");
+      label(svg, W - 128, 14, ["completions"], "small muted").setAttribute("text-anchor", "start");
+    }
+  }
+  circle(svg, S[0], S[1], 14, "var(--node)"); circle(svg, C[0], C[1], 14, "var(--node)");
+  label(svg, S[0] + 4, 236, ["ASU"]); label(svg, C[0] - 6, 236, [`CIP ${ex.cip}`]);
+  return svg;
+}
+
+function fmtSize(s) {
+  if (!s) return "";
+  return "nodes" in s ? `${s.nodes.toLocaleString()} nodes, ${s.edges.toLocaleString()} edges`
+                      : `${s.triples.toLocaleString()} triples`;
+}
+
+function render() {
+  const ex = DATA.examples[cur], key = ex.unitid + "|" + ex.cip;
+  const asked = ex.rows.find(r => r.level === ex.level);
+  document.getElementById("question").textContent =
+    `How many ${asked.short.toLowerCase().replace("'s", "'s")} degrees did ${ex.school} confer in ${ex.title} (CIP ${ex.cip})? IPEDS says ${asked.completions.toLocaleString()}.`;
+  [...document.querySelectorAll("#examples button")].forEach((b, i) => b.setAttribute("aria-pressed", i === cur));
+  document.getElementById("slip").setAttribute("aria-pressed", slip);
+  const n = ex.rows.length, P = DATA.pairs;
+  document.getElementById("summary").textContent = n > 1
+    ? `This pair has ${n} award levels. Every model that gives each row its own node, edge or reifier returns ${asked.completions.toLocaleString()}. The two that hang every row on one shared term can't tell the levels apart. In this dataset, ${P.several_levels.toLocaleString()} of ${P.total.toLocaleString()} school-CIP pairs (${Math.round(100 * P.several_levels / P.total)}%) have more than one award level.`
+    : `This pair has one award level, so every model returns the right answer, including the two that break on the other examples. That's what makes the problem easy to miss.`;
+  const box = document.getElementById("cards"); box.innerHTML = "";
+  for (const c of DATA.cards) {
+    if (c.key === "reifier-pair") continue;
+    const card = slip && c.key === "reifier" ? DATA.cards.find(x => x.key === "reifier-pair") : c;
+    const kind = card.key, [title, desc] = TEXT[kind];
+    const d = document.createElement("article");
+    d.className = "card" + (kind === "reifier-pair" ? " slip" : "");
+    d.innerHTML = `<div class="head"><h2></h2><div class="engine"></div><p class="desc"></p></div>`;
+    d.querySelector("h2").textContent = title;
+    d.querySelector(".engine").textContent = card.engine;
+    d.querySelector(".desc").textContent = desc;
+    d.appendChild(draw(kind, ex));
+    const a = document.createElement("div");
+    if (card.ran) {
+      const got = card.answers[key], ok = got.length === 1 && got[0] === asked.completions;
+      a.className = "answer " + (ok ? "ok" : "bad");
+      a.textContent = ok ? `The query returns ${got[0].toLocaleString()}. Correct.`
+        : `The query returns ${got.length} answers: ${got.map(x => x.toLocaleString()).join(", ")}.`;
+    } else {
+      a.className = "answer"; a.textContent = "Not run yet: see run_rdfstar_2021.py.";
+    }
+    d.appendChild(a);
+    const s = document.createElement("div"); s.className = "size";
+    s.textContent = card.size ? "Full graph: " + fmtSize(card.size) : "";
+    d.appendChild(s);
+    for (const [lab, txt] of [[kind === "pg" ? "Show the Cypher that writes it" : "Show the Turtle (prefixes omitted)", card.code[key]], ["Show the query", card.query[key]]]) {
+      const det = document.createElement("details");
+      det.innerHTML = "<summary></summary><pre></pre>";
+      det.querySelector("summary").textContent = lab;
+      det.querySelector("pre").textContent = txt;
+      d.appendChild(det);
+    }
+    box.appendChild(d);
+  }
+}
+
+function table() {
+  const tb = document.getElementById("tbody"), t1 = DATA.truth.q1[0], t2 = DATA.truth.q2total;
+  for (const c of DATA.cards) {
+    const tr = document.createElement("tr");
+    const ans = c.ran ? c.q1.join(", ") : "not run";
+    const ok1 = c.ran && c.q1.length === 1 && c.q1[0] === t1, ok2 = c.ran && c.q2total === t2;
+    tr.innerHTML = `<td></td><td></td><td class="num"></td><td class="num"></td><td class="num"></td>`;
+    const td = tr.children;
+    td[0].textContent = TEXT[c.key][0]; td[1].textContent = c.engine; td[2].textContent = fmtSize(c.size);
+    td[3].innerHTML = `<span class="${ok1 ? "yes" : "no"}"></span>`; td[3].firstChild.textContent = ans;
+    td[4].innerHTML = `<span class="${ok2 ? "yes" : "no"}"></span>`;
+    td[4].firstChild.textContent = c.ran ? c.q2total.toLocaleString() + (ok2 ? "" : ` (IPEDS: ${t2.toLocaleString()})`) : "not run";
+    tb.appendChild(tr);
+  }
+}
+
+const exBox = document.getElementById("examples");
+DATA.examples.forEach((ex, i) => {
+  const b = document.createElement("button");
+  b.textContent = `${ex.title} (${ex.rows.length} level${ex.rows.length > 1 ? "s" : ""})`;
+  b.onclick = () => { cur = i; render(); };
+  exBox.appendChild(b);
+});
+document.getElementById("slip").onclick = () => { slip = !slip; render(); };
+render(); table();
+</script>
+</body>
+</html>
